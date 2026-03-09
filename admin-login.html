@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEST Admin — Secure Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d1117; --forest: #1a3a2a; --jade: #2d6a4f;
+    --moss: #52b788; --gold: #c9a84c; --cream: #faf7f2;
+    --serif: 'Cormorant Garamond', serif;
+    --sans: 'DM Sans', sans-serif; --mono: 'Space Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--sans); background: var(--ink);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+
+  /* Animated background */
+  .bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(82,183,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(82,183,136,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    animation: grid-move 30s linear infinite;
+  }
+  @keyframes grid-move { from { transform: translateY(0); } to { transform: translateY(48px); } }
+
+  .bg-glow-1 {
+    position: absolute; width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(45,106,79,0.15) 0%, transparent 70%);
+    top: -100px; right: -100px; pointer-events: none;
+    animation: float1 8s ease-in-out infinite alternate;
+  }
+  .bg-glow-2 {
+    position: absolute; width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+    bottom: -100px; left: -100px; pointer-events: none;
+    animation: float2 10s ease-in-out infinite alternate;
+  }
+  @keyframes float1 { from { transform: translate(0,0); } to { transform: translate(-40px, 40px); } }
+  @keyframes float2 { from { transform: translate(0,0); } to { transform: translate(40px, -40px); } }
+
+  .login-wrapper {
+    position: relative; z-index: 10;
+    display: flex; gap: 0; width: 900px; max-width: 95vw;
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.5);
+  }
+
+  /* Left panel */
+  .login-panel-left {
+    width: 45%; background: linear-gradient(150deg, #1a3a2a 0%, #0d2018 100%);
+    padding: 3rem 2.5rem; display: flex; flex-direction: column;
+    justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .login-panel-left::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(circle, rgba(82,183,136,0.06) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+  }
+  .lpl-logo { position: relative; z-index: 1; }
+  .lpl-mark {
+    width: 52px; height: 52px; background: rgba(82,183,136,0.1);
+    border: 1px solid rgba(82,183,136,0.2); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .lpl-mark::after {
+    content: ''; width: 20px; height: 20px;
+    border: 2px solid var(--moss); border-radius: 50%;
+    position: absolute;
+  }
+  .lpl-name {
+    font-family: var(--serif); font-size: 1.75rem; font-weight: 700;
+    color: var(--cream); letter-spacing: 0.04em;
+  }
+  .lpl-sub {
+    font-size: 0.7rem; color: var(--moss); letter-spacing: 0.12em;
+    text-transform: uppercase; margin-top: 2px;
+  }
+
+  .lpl-content { position: relative; z-index: 1; }
+  .lpl-content h2 {
+    font-family: var(--serif); font-size: 2rem; font-weight: 300;
+    color: var(--cream); line-height: 1.15; margin-bottom: 1rem;
+  }
+  .lpl-content h2 em { font-style: italic; color: var(--moss); }
+  .lpl-content p { font-size: 0.85rem; color: rgba(250,247,242,0.5); line-height: 1.7; }
+
+  .lpl-features { position: relative; z-index: 1; list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .lpl-features li {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem; color: rgba(250,247,242,0.4);
+  }
+  .lpl-feat-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--moss);
+    flex-shrink: 0;
+  }
+
+  /* Right panel */
+  .login-panel-right {
+    flex: 1; background: var(--cream); padding: 3rem 2.5rem;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+
+  .login-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2);
+    color: var(--gold); font-family: var(--mono); font-size: 0.65rem;
+    font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 0.35rem 0.85rem; border-radius: 4px; margin-bottom: 1.5rem;
+  }
+  .lock-icon { font-size: 0.75rem; }
+
+  .login-title {
+    font-family: var(--serif); font-size: 2rem; font-weight: 700;
+    color: var(--forest); margin-bottom: 0.35rem;
+  }
+  .login-subtitle { font-size: 0.875rem; color: #6b7280; margin-bottom: 2.5rem; line-height: 1.5; }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-label {
+    display: block; font-size: 0.78rem; font-weight: 500;
+    color: var(--forest); margin-bottom: 0.4rem; letter-spacing: 0.03em;
+  }
+  .form-input {
+    width: 100%; padding: 0.8rem 1rem;
+    border: 1.5px solid rgba(45,106,79,0.12); border-radius: 8px;
+    font-family: var(--sans); font-size: 0.9rem; color: var(--ink);
+    background: white; outline: none; transition: all 0.2s;
+  }
+  .form-input:focus {
+    border-color: var(--moss);
+    box-shadow: 0 0 0 3px rgba(82,183,136,0.1);
+  }
+  .form-input-wrap { position: relative; }
+  .pw-toggle {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    font-size: 0.8rem; color: #9ca3af; padding: 4px;
+  }
+
+  .remember-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.75rem; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .remember-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.82rem; color: #6b7280; cursor: pointer;
+  }
+  .remember-label input { accent-color: var(--jade); }
+  .forgot-link { font-size: 0.82rem; color: var(--jade); text-decoration: none; }
+  .forgot-link:hover { text-decoration: underline; }
+
+  .login-btn {
+    width: 100%; padding: 0.9rem; background: var(--forest); color: var(--cream);
+    border: none; border-radius: 8px; font-family: var(--sans);
+    font-size: 0.95rem; font-weight: 500; cursor: pointer; letter-spacing: 0.02em;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .login-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--jade); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s; z-index: 0;
+  }
+  .login-btn:hover::before { transform: scaleX(1); }
+  .login-btn span { position: relative; z-index: 1; }
+  .login-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,58,42,0.2); }
+
+  .login-divider {
+    display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0;
+    font-size: 0.78rem; color: #d1d5db;
+  }
+  .login-divider::before, .login-divider::after {
+    content: ''; flex: 1; height: 1px; background: rgba(45,106,79,0.1);
+  }
+
+  .otp-btn {
+    width: 100%; padding: 0.8rem; background: transparent; color: var(--forest);
+    border: 1.5px solid rgba(45,106,79,0.15); border-radius: 8px;
+    font-family: var(--sans); font-size: 0.875rem; font-weight: 500;
+    cursor: pointer; letter-spacing: 0.02em; transition: all 0.2s;
+  }
+  .otp-btn:hover { border-color: var(--moss); background: rgba(82,183,136,0.04); }
+
+  .login-footer-note {
+    margin-top: 2rem; font-size: 0.75rem; color: #9ca3af; text-align: center; line-height: 1.6;
+  }
+  .login-footer-note a { color: var(--jade); text-decoration: none; }
+
+  .error-msg {
+    display: none; padding: 0.75rem 1rem; background: rgba(193,68,14,0.06);
+    border: 1px solid rgba(193,68,14,0.2); border-radius: 6px;
+    color: #c1440e; font-size: 0.82rem; margin-bottom: 1rem;
+  }
+  .error-msg.show { display: flex; align-items: center; gap: 8px; }
+
+  /* MFA Step */
+  .mfa-step { display: none; }
+  .mfa-step.show { display: block; }
+  .credentials-step.hide { display: none; }
+
+  .otp-inputs {
+    display: flex; gap: 8px; justify-content: center; margin: 1.5rem 0;
+  }
+  .otp-input {
+    width: 44px; height: 52px; text-align: center;
+    font-family: var(--mono); font-size: 1.25rem; font-weight: 700;
+    border: 1.5px solid rgba(45,106,79,0.15); border-radius: 8px;
+    background: white; color: var(--forest); outline: none; transition: all 0.2s;
+  }
+  .otp-input:focus { border-color: var(--moss); box-shadow: 0 0 0 3px rgba(82,183,136,0.1); }
+
+  .security-footer {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 1.5rem; font-size: 0.72rem; color: #9ca3af;
+    font-family: var(--mono); letter-spacing: 0.04em;
+  }
+  .security-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--moss); animation: blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  @media (max-width: 700px) {
+    .login-panel-left { display: none; }
+    .login-panel-right { border-radius: 20px; }
+    .login-wrapper { width: 100%; max-width: 440px; }
+  }
+</style>
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow-1" aria-hidden="true"></div>
+<div class="bg-glow-2" aria-hidden="true"></div>
+
+<div class="login-wrapper" role="main">
+  <!-- Left decorative panel -->
+  <div class="login-panel-left" aria-hidden="true">
+    <div class="lpl-logo">
+      <div class="lpl-mark"></div>
+      <div class="lpl-name">NEST</div>
+      <div class="lpl-sub">Internal Portal</div>
+    </div>
+
+    <div class="lpl-content">
+      <h2>Secure<br><em>Administrative</em><br>Access</h2>
+      <p>This portal is restricted to authorised NEST Cluster administrators and staff only. Unauthorised access attempts are logged and reported.</p>
+    </div>
+
+    <ul class="lpl-features">
+      <li><span class="lpl-feat-dot"></span>Traffic Analytics & Behaviour Patterns</li>
+      <li><span class="lpl-feat-dot"></span>Geographical Visitor Intelligence</li>
+      <li><span class="lpl-feat-dot"></span>Automated Monthly Report Generation</li>
+      <li><span class="lpl-feat-dot"></span>Content Management & Updates</li>
+      <li><span class="lpl-feat-dot"></span>User & Application Management</li>
+    </ul>
+  </div>
+
+  <!-- Right login panel -->
+  <div class="login-panel-right">
+    <div class="login-badge">
+      <span class="lock-icon">🔒</span> Secured by GENORROW
+    </div>
+
+    <!-- Step 1: Credentials -->
+    <div class="credentials-step" id="credStep">
+      <h1 class="login-title">Admin Login</h1>
+      <p class="login-subtitle">Sign in to the NEST Cluster administrative dashboard. Your session is encrypted and monitored.</p>
+
+      <div class="error-msg" id="errorMsg" role="alert">
+        ⚠ Invalid credentials. Please check and try again.
+      </div>
+
+      <form onsubmit="handleLogin(event)" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="adminEmail">Admin Email</label>
+          <input class="form-input" type="email" id="adminEmail" required
+            autocomplete="username" placeholder="admin@nestcluster.in">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="adminPw">Password</label>
+          <div class="form-input-wrap">
+            <input class="form-input" type="password" id="adminPw" required
+              autocomplete="current-password" placeholder="Enter your password">
+            <button type="button" class="pw-toggle" onclick="togglePw()" aria-label="Show/hide password">
+              👁
+            </button>
+          </div>
+        </div>
+
+        <div class="remember-row">
+          <label class="remember-label">
+            <input type="checkbox" id="remember"> Remember device for 30 days
+          </label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">
+          <span>Continue to Verification →</span>
+        </button>
+      </form>
+
+      <div class="login-divider">or sign in with</div>
+      <button class="otp-btn" onclick="alert('OTP sent to registered email/phone')">
+        📱 Request One-Time Password (OTP)
+      </button>
+    </div>
+
+    <!-- Step 2: MFA -->
+    <div class="mfa-step" id="mfaStep">
+      <h1 class="login-title">Verify Identity</h1>
+      <p class="login-subtitle">A 6-digit verification code has been sent to your registered email. Enter it below to access the dashboard.</p>
+
+      <div class="otp-inputs" role="group" aria-label="OTP input">
+        <input class="otp-input" type="text" maxlength="1" aria-label="Digit 1" oninput="otpNext(this, 0)">
+        <input class="otp-input" type="text" maxlength="1" aria-label="Digit 2" oninput="otpNext(this, 1)">
+        <input class="otp-input" type="text" maxlength="1" aria-label="Digit 3" oninput="otpNext(this, 2)">
+        <input class="otp-input" type="text" maxlength="1" aria-label="Digit 4" oninput="otpNext(this, 3)">
+        <input class="otp-input" type="text" maxlength="1" aria-label="Digit 5" oninput="otpNext(this, 4)">
+        <input class="otp-input" type="text" maxlength="1" aria-label="Digit 6" oninput="otpNext(this, 5)">
+      </div>
+
+      <button class="login-btn" onclick="verifyOTP()">
+        <span>Verify & Access Dashboard →</span>
+      </button>
+
+      <p style="text-align:center;margin-top:1rem;font-size:0.8rem;color:#9ca3af;">
+        Didn't receive code? <a href="#" style="color:var(--jade);" onclick="return false;">Resend in 0:45</a>
+        &nbsp;·&nbsp; <a href="#" style="color:var(--jade);" onclick="showCreds()">← Back</a>
+      </p>
+    </div>
+
+    <div class="login-footer-note">
+      This is a restricted system. By logging in, you agree to NEST's
+      <a href="privacy.html">Privacy Policy</a> &amp; <a href="#">Acceptable Use Policy</a>.
+      All activity is logged.
+    </div>
+
+    <div class="security-footer">
+      <span class="security-dot"></span>
+      256-bit SSL · Session Encrypted · GENORROW Security
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePw() {
+    const pw = document.getElementById('adminPw');
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('adminEmail').value;
+    const pw = document.getElementById('adminPw').value;
+    // Demo: any non-empty credentials proceed to MFA
+    if (email && pw.length >= 6) {
+      document.getElementById('credStep').classList.add('hide');
+      document.getElementById('mfaStep').classList.add('show');
+    } else {
+      document.getElementById('errorMsg').classList.add('show');
+      setTimeout(() => document.getElementById('errorMsg').classList.remove('show'), 3500);
+    }
+  }
+
+  function showCreds() {
+    document.getElementById('credStep').classList.remove('hide');
+    document.getElementById('mfaStep').classList.remove('show');
+  }
+
+  function otpNext(input, idx) {
+    const inputs = document.querySelectorAll('.otp-input');
+    if (input.value.length === 1 && idx < 5) inputs[idx + 1].focus();
+    // Auto-verify demo when all filled
+    const code = Array.from(inputs).map(i => i.value).join('');
+    if (code.length === 6) setTimeout(verifyOTP, 400);
+  }
+
+  function verifyOTP() {
+    // In production, verify against server
+    window.location.href = 'admin-dashboard.html';
+  }
+</script>
+</body>
+</html>

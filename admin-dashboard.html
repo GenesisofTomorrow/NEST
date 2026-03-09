@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEST Admin Dashboard — Analytics & Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink: #0d1117; --forest: #1a3a2a; --jade: #2d6a4f;
+    --moss: #52b788; --mist: #b7e4c7; --cream: #faf7f2;
+    --gold: #c9a84c; --amber: #e8b84b; --rust: #c1440e;
+    --sky: #3b82f6; --purple: #8b5cf6;
+    --bg: #f1f4f2; --sidebar: #0d1f18; --card: #ffffff;
+    --border: rgba(45,106,79,0.1); --text-2: #6b7280;
+    --serif: 'Cormorant Garamond', serif;
+    --sans: 'DM Sans', sans-serif; --mono: 'Space Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 15px; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--ink); display: flex; min-height: 100vh; }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 240px; min-height: 100vh; background: var(--sidebar);
+    display: flex; flex-direction: column; flex-shrink: 0;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    transition: width 0.3s;
+  }
+  .sidebar.collapsed { width: 68px; }
+
+  .sidebar-logo {
+    padding: 1.5rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sidebar-logo-mark {
+    width: 34px; height: 34px; flex-shrink: 0;
+    background: rgba(82,183,136,0.12); border: 1px solid rgba(82,183,136,0.2);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .sidebar-logo-mark::after {
+    content: ''; width: 14px; height: 14px;
+    border: 2px solid var(--moss); border-radius: 50%;
+  }
+  .sidebar-logo-text { overflow: hidden; }
+  .sidebar-logo-text strong { display: block; font-family: var(--serif); font-size: 1.15rem; color: var(--cream); }
+  .sidebar-logo-text span { font-size: 0.6rem; color: var(--moss); letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+
+  .sidebar-nav { padding: 1rem 0; flex: 1; }
+  .nav-section-label {
+    font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: rgba(255,255,255,0.2);
+    padding: 1rem 1.25rem 0.4rem;
+    white-space: nowrap; overflow: hidden;
+  }
+  .sidebar.collapsed .nav-section-label { opacity: 0; }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0.65rem 1.25rem; text-decoration: none;
+    color: rgba(255,255,255,0.45); font-size: 0.83rem; font-weight: 400;
+    transition: all 0.2s; border-left: 2px solid transparent;
+    white-space: nowrap; cursor: pointer; border: none; background: none;
+    width: 100%; text-align: left;
+  }
+  .nav-item:hover { color: var(--cream); background: rgba(255,255,255,0.04); }
+  .nav-item.active {
+    color: var(--moss); border-left-color: var(--moss);
+    background: rgba(82,183,136,0.06);
+  }
+  .nav-icon { font-size: 1rem; flex-shrink: 0; width: 20px; text-align: center; }
+  .nav-label { overflow: hidden; }
+  .sidebar.collapsed .nav-label { display: none; }
+  .nav-badge {
+    margin-left: auto; background: var(--rust); color: white;
+    font-size: 0.6rem; font-weight: 700; padding: 1px 5px; border-radius: 10px;
+  }
+  .sidebar.collapsed .nav-badge { display: none; }
+
+  .sidebar-footer {
+    padding: 1rem 1.25rem; border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .admin-user {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .admin-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--jade), var(--moss));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700; color: white; flex-shrink: 0;
+  }
+  .admin-info { overflow: hidden; }
+  .admin-name { font-size: 0.78rem; color: var(--cream); font-weight: 500; white-space: nowrap; }
+  .admin-role { font-size: 0.65rem; color: rgba(255,255,255,0.3); }
+  .sidebar.collapsed .admin-info { display: none; }
+  .sidebar.collapsed .sidebar-logo-text { display: none; }
+
+  .sidebar-toggle {
+    position: absolute; top: 1.5rem; right: -12px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--jade); border: 2px solid var(--bg);
+    color: white; font-size: 0.65rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s; z-index: 10;
+  }
+  .sidebar.collapsed .sidebar-toggle { transform: rotate(180deg); }
+
+  /* ─── MAIN ─── */
+  .main { flex: 1; min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+  .topbar {
+    background: var(--card); height: 60px; padding: 0 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 1rem; }
+  .page-title { font-family: var(--serif); font-size: 1.35rem; color: var(--forest); font-weight: 600; }
+  .breadcrumb { font-size: 0.75rem; color: var(--text-2); }
+  .breadcrumb span { color: var(--jade); }
+
+  .topbar-right { display: flex; align-items: center; gap: 1rem; }
+  .topbar-btn {
+    padding: 0.45rem 1rem; border-radius: 7px; font-size: 0.8rem;
+    font-family: var(--sans); font-weight: 500; cursor: pointer;
+    transition: all 0.2s; border: 1.5px solid var(--border);
+    background: transparent; color: var(--jade); letter-spacing: 0.02em;
+  }
+  .topbar-btn.primary { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+  .topbar-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .topbar-btn.primary:hover { background: var(--jade); border-color: var(--jade); }
+
+  .notif-btn {
+    position: relative; background: none; border: none; cursor: pointer;
+    font-size: 1.1rem; padding: 6px;
+  }
+  .notif-badge {
+    position: absolute; top: 2px; right: 2px;
+    width: 8px; height: 8px; background: var(--rust); border-radius: 50%;
+  }
+
+  .date-range {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--text-2);
+    background: var(--bg); padding: 0.4rem 0.85rem; border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+
+  /* ─── CONTENT ─── */
+  .content { padding: 1.5rem; overflow-y: auto; flex: 1; }
+  .content-section { display: none; }
+  .content-section.active { display: block; }
+
+  /* ─── KPI CARDS ─── */
+  .kpi-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .kpi-card {
+    background: var(--card); border-radius: 12px;
+    padding: 1.25rem; border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .kpi-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .kpi-card.green::before { background: var(--moss); }
+  .kpi-card.gold::before { background: var(--gold); }
+  .kpi-card.blue::before { background: var(--sky); }
+  .kpi-card.purple::before { background: var(--purple); }
+
+  .kpi-label { font-size: 0.72rem; font-weight: 500; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+  .kpi-val { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: var(--forest); line-height: 1; margin-bottom: 0.4rem; }
+  .kpi-change {
+    font-size: 0.75rem; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 3px;
+  }
+  .kpi-change.up { color: #059669; }
+  .kpi-change.down { color: var(--rust); }
+  .kpi-icon {
+    position: absolute; top: 1rem; right: 1rem;
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .kpi-card.green .kpi-icon { background: rgba(82,183,136,0.1); }
+  .kpi-card.gold .kpi-icon { background: rgba(201,168,76,0.1); }
+  .kpi-card.blue .kpi-icon { background: rgba(59,130,246,0.1); }
+  .kpi-card.purple .kpi-icon { background: rgba(139,92,246,0.1); }
+
+  /* ─── CHARTS ROW ─── */
+  .charts-row {
+    display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .chart-card {
+    background: var(--card); border-radius: 12px; padding: 1.25rem;
+    border: 1px solid var(--border);
+  }
+  .chart-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .chart-title { font-size: 0.875rem; font-weight: 600; color: var(--forest); }
+  .chart-subtitle { font-size: 0.72rem; color: var(--text-2); }
+  .chart-tabs {
+    display: flex; gap: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+  }
+  .chart-tab {
+    padding: 0.3rem 0.7rem; font-size: 0.72rem; font-weight: 500;
+    background: none; border: none; cursor: pointer; color: var(--text-2);
+    transition: all 0.15s;
+  }
+  .chart-tab.active { background: var(--forest); color: white; }
+
+  /* ─── GEO MAP ─── */
+  .geo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+
+  .geo-card { background: var(--card); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border); }
+
+  .region-list { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.75rem; }
+  .region-item { display: flex; align-items: center; gap: 10px; }
+  .region-name { font-size: 0.82rem; color: var(--forest); min-width: 100px; font-weight: 500; }
+  .region-bar-wrap { flex: 1; height: 6px; background: rgba(45,106,79,0.08); border-radius: 3px; }
+  .region-bar { height: 100%; border-radius: 3px; background: var(--moss); transition: width 1s ease; }
+  .region-count { font-family: var(--mono); font-size: 0.72rem; color: var(--text-2); min-width: 50px; text-align: right; }
+  .region-pct { font-size: 0.72rem; color: var(--text-2); min-width: 36px; text-align: right; }
+
+  /* NE Map SVG in dashboard */
+  .ne-map-wrap {
+    position: relative; height: 240px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(26,58,42,0.02); border-radius: 8px; margin-top: 0.75rem;
+    overflow: hidden;
+  }
+
+  /* ─── BEHAVIOUR TABLE ─── */
+  .table-card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 1.5rem; }
+  .table-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+  .table-title { font-size: 0.875rem; font-weight: 600; color: var(--forest); }
+  .table-search { padding: 0.4rem 0.8rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.8rem; font-family: var(--sans); outline: none; color: var(--ink); }
+  .table-search:focus { border-color: var(--moss); }
+
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    padding: 0.75rem 1.25rem; text-align: left;
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-2); background: rgba(45,106,79,0.02);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 0.75rem 1.25rem; font-size: 0.82rem; color: var(--ink);
+    border-bottom: 1px solid rgba(45,106,79,0.04);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(82,183,136,0.02); }
+
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.7rem; font-weight: 600;
+  }
+  .status-badge.new { background: rgba(59,130,246,0.1); color: #2563eb; }
+  .status-badge.returning { background: rgba(82,183,136,0.1); color: var(--jade); }
+  .status-badge.bounce { background: rgba(201,168,76,0.1); color: #92400e; }
+
+  /* ─── REPORT SECTION ─── */
+  .report-card {
+    background: var(--card); border-radius: 12px; padding: 1.5rem;
+    border: 1px solid var(--border); margin-bottom: 1.5rem;
+  }
+  .report-title { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; color: var(--forest); margin-bottom: 0.4rem; }
+  .report-desc { font-size: 0.85rem; color: var(--text-2); margin-bottom: 1.5rem; line-height: 1.6; }
+
+  .report-config { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  .config-item label { display: block; font-size: 0.75rem; font-weight: 500; color: var(--forest); margin-bottom: 0.35rem; }
+  .config-item select, .config-item input {
+    width: 100%; padding: 0.6rem 0.9rem; border: 1.5px solid var(--border);
+    border-radius: 7px; font-size: 0.82rem; font-family: var(--sans);
+    color: var(--ink); background: var(--bg); outline: none;
+  }
+  .config-item select:focus, .config-item input:focus { border-color: var(--moss); background: white; }
+
+  .report-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .report-btn {
+    padding: 0.7rem 1.5rem; border-radius: 8px; font-size: 0.85rem;
+    font-family: var(--sans); font-weight: 500; cursor: pointer;
+    transition: all 0.2s; letter-spacing: 0.02em;
+  }
+  .report-btn.gen { background: var(--forest); color: var(--cream); border: none; }
+  .report-btn.gen:hover { background: var(--jade); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,58,42,0.2); }
+  .report-btn.preview { background: transparent; border: 1.5px solid var(--border); color: var(--forest); }
+  .report-btn.preview:hover { border-color: var(--moss); }
+  .report-btn.schedule { background: rgba(201,168,76,0.1); border: 1.5px solid rgba(201,168,76,0.2); color: #92400e; }
+  .report-btn.schedule:hover { background: rgba(201,168,76,0.2); }
+
+  .email-config {
+    margin-top: 1.5rem; padding: 1.25rem;
+    background: rgba(45,106,79,0.02); border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .email-config h4 { font-size: 0.82rem; font-weight: 600; color: var(--forest); margin-bottom: 1rem; }
+
+  .schedule-status {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0.75rem 1rem; background: rgba(82,183,136,0.06);
+    border: 1px solid rgba(82,183,136,0.15); border-radius: 8px;
+    margin-top: 1rem; font-size: 0.82rem; color: var(--jade); font-weight: 500;
+  }
+  .schedule-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--moss); animation: blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  /* ─── DEVICE DONUT ─── */
+  .device-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+
+  /* ─── REAL-TIME ─── */
+  .realtime-bar {
+    background: var(--forest); border-radius: 10px; padding: 0.85rem 1.25rem;
+    display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .rt-pulse { width: 10px; height: 10px; border-radius: 50%; background: #4ade80; animation: blink 1s infinite; }
+  .rt-label { font-size: 0.78rem; color: rgba(255,255,255,0.6); }
+  .rt-val { font-family: var(--mono); font-size: 1.25rem; font-weight: 700; color: var(--cream); }
+  .rt-item { display: flex; align-items: center; gap: 8px; }
+
+  /* ─── PREVIEW MODAL ─── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(13,17,23,0.6); z-index: 2000;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white; border-radius: 16px; width: 680px; max-width: 95vw;
+    max-height: 90vh; overflow-y: auto; box-shadow: 0 40px 80px rgba(0,0,0,0.2);
+  }
+  .modal-header {
+    padding: 1.5rem 2rem; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; background: white;
+  }
+  .modal-title { font-family: var(--serif); font-size: 1.25rem; font-weight: 600; color: var(--forest); }
+  .modal-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-2); }
+  .modal-body { padding: 2rem; }
+
+  /* Report preview styles */
+  .report-preview { font-family: var(--sans); }
+  .rp-header { background: var(--forest); color: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; }
+  .rp-title { font-family: var(--serif); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .rp-sub { font-size: 0.8rem; opacity: 0.7; }
+  .rp-section { margin-bottom: 1.5rem; }
+  .rp-section h3 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--jade); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-bottom: 0.75rem; }
+  .rp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 0.75rem; }
+  .rp-kpi { text-align: center; background: var(--bg); border-radius: 8px; padding: 0.75rem; }
+  .rp-kpi-val { font-family: var(--serif); font-size: 1.5rem; font-weight: 700; color: var(--forest); }
+  .rp-kpi-label { font-size: 0.68rem; color: var(--text-2); }
+  .rp-p { font-size: 0.82rem; color: #4b5563; line-height: 1.65; margin-bottom: 0.5rem; }
+  .rp-footer { font-size: 0.72rem; color: var(--text-2); text-align: center; border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 1.5rem; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1200px) {
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .charts-row { grid-template-columns: 1fr; }
+    .geo-row { grid-template-columns: 1fr; }
+    .device-row { grid-template-columns: 1fr 1fr; }
+    .report-config { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .device-row { grid-template-columns: 1fr; }
+    .report-config { grid-template-columns: 1fr; }
+  }
+
+  /* Section tabs */
+  .section-nav {
+    display: flex; gap: 0; border-bottom: 2px solid var(--border);
+    margin-bottom: 1.5rem; overflow-x: auto;
+  }
+  .section-tab {
+    padding: 0.65rem 1.25rem; font-size: 0.82rem; font-weight: 500;
+    background: none; border: none; cursor: pointer; color: var(--text-2);
+    border-bottom: 2px solid transparent; margin-bottom: -2px;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .section-tab.active { color: var(--jade); border-bottom-color: var(--jade); }
+
+  .powered-footer {
+    padding: 1rem 1.5rem; text-align: right; font-size: 0.7rem;
+    color: var(--text-2); border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: flex-end; gap: 6px;
+  }
+  .powered-badge {
+    background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2);
+    color: var(--gold); font-family: var(--mono); font-size: 0.62rem;
+    font-weight: 700; letter-spacing: 0.1em; padding: 2px 7px; border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── SIDEBAR ─── -->
+<nav class="sidebar" id="sidebar" aria-label="Admin navigation">
+  <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Collapse sidebar">◀</button>
+
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-mark" aria-hidden="true"></div>
+    <div class="sidebar-logo-text">
+      <strong>NEST</strong>
+      <span>Admin Portal</span>
+    </div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section-label">Analytics</div>
+    <button class="nav-item active" onclick="showSection('overview', this)" aria-current="page">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Overview</span>
+    </button>
+    <button class="nav-item" onclick="showSection('traffic', this)">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">Traffic Analysis</span>
+    </button>
+    <button class="nav-item" onclick="showSection('geo', this)">
+      <span class="nav-icon">🗺️</span>
+      <span class="nav-label">Geographic Data</span>
+    </button>
+    <button class="nav-item" onclick="showSection('behaviour', this)">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-label">Behaviour Patterns</span>
+    </button>
+    <button class="nav-item" onclick="showSection('reports', this)">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">Reports & Export</span>
+    </button>
+
+    <div class="nav-section-label">Management</div>
+    <button class="nav-item" onclick="showSection('content', this)">
+      <span class="nav-icon">✏️</span>
+      <span class="nav-label">Content Manager</span>
+    </button>
+    <button class="nav-item" onclick="showSection('applications', this)">
+      <span class="nav-icon">📁</span>
+      <span class="nav-label">Applications</span>
+      <span class="nav-badge">12</span>
+    </button>
+    <button class="nav-item" onclick="showSection('users', this)">
+      <span class="nav-icon">👥</span>
+      <span class="nav-label">Admin Users</span>
+    </button>
+
+    <div class="nav-section-label">Settings</div>
+    <button class="nav-item" onclick="showSection('settings', this)">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">Configuration</span>
+    </button>
+    <a href="index.html" class="nav-item" style="color:rgba(255,150,100,0.5);">
+      <span class="nav-icon">↗</span>
+      <span class="nav-label">View Public Site</span>
+    </a>
+    <a href="admin-login.html" class="nav-item" style="color:rgba(255,100,100,0.4);">
+      <span class="nav-icon">⬡</span>
+      <span class="nav-label">Sign Out</span>
+    </a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="admin-user">
+      <div class="admin-avatar">AD</div>
+      <div class="admin-info">
+        <div class="admin-name">Admin User</div>
+        <div class="admin-role">Super Admin</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── MAIN ─── -->
+<div class="main">
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1 class="page-title" id="pageTitle">Analytics Overview</h1>
+      <div class="breadcrumb">Admin / <span id="breadcrumbCurrent">Overview</span></div>
+    </div>
+    <div class="topbar-right">
+      <select class="date-range" onchange="updateDateRange(this.value)" aria-label="Date range selector">
+        <option value="7">Last 7 days</option>
+        <option value="30" selected>Last 30 days</option>
+        <option value="90">Last 90 days</option>
+        <option value="365">This Year</option>
+      </select>
+      <button class="notif-btn" aria-label="Notifications">
+        🔔 <span class="notif-badge"></span>
+      </button>
+      <button class="topbar-btn" onclick="showModal()">Preview Report</button>
+      <button class="topbar-btn primary" onclick="document.getElementById('sec-reports').click()">Generate Report</button>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- ─── OVERVIEW ─── -->
+    <div class="content-section active" id="sec-overview">
+
+      <!-- Real-time bar -->
+      <div class="realtime-bar" role="status" aria-live="polite">
+        <div class="rt-pulse"></div>
+        <div class="rt-item">
+          <div class="rt-label">Live Visitors Now</div>
+          <div class="rt-val" id="liveVisitors">47</div>
+        </div>
+        <div class="rt-item">
+          <div class="rt-label">Active Sessions</div>
+          <div class="rt-val" id="activeSessions">112</div>
+        </div>
+        <div class="rt-item">
+          <div class="rt-label">Top Page</div>
+          <div class="rt-val" style="font-size:0.85rem;">/programmes</div>
+        </div>
+        <div class="rt-item" style="margin-left:auto;">
+          <div class="rt-label" style="font-size:0.68rem;">Updated</div>
+          <div class="rt-val" style="font-size:0.85rem;" id="lastUpdated">Just now</div>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-row">
+        <div class="kpi-card green">
+          <div class="kpi-icon">👥</div>
+          <div class="kpi-label">Total Visitors</div>
+          <div class="kpi-val">24,831</div>
+          <div class="kpi-change up">↑ 18.4% vs last period</div>
+        </div>
+        <div class="kpi-card gold">
+          <div class="kpi-icon">📄</div>
+          <div class="kpi-label">Page Views</div>
+          <div class="kpi-val">89,204</div>
+          <div class="kpi-change up">↑ 24.1% vs last period</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-icon">⏱</div>
+          <div class="kpi-label">Avg. Session Duration</div>
+          <div class="kpi-val">4:32</div>
+          <div class="kpi-change up">↑ 8.2% vs last period</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-icon">⬇</div>
+          <div class="kpi-label">Bounce Rate</div>
+          <div class="kpi-val">31.2%</div>
+          <div class="kpi-change up">↓ 5.8% (improved)</div>
+        </div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Visitor Traffic Over Time</div>
+              <div class="chart-subtitle">Daily unique visitors — last 30 days</div>
+            </div>
+            <div class="chart-tabs">
+              <button class="chart-tab active" onclick="switchChartPeriod('daily',this)">Daily</button>
+              <button class="chart-tab" onclick="switchChartPeriod('weekly',this)">Weekly</button>
+              <button class="chart-tab" onclick="switchChartPeriod('monthly',this)">Monthly</button>
+            </div>
+          </div>
+          <canvas id="trafficChart" height="200"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Traffic Sources</div>
+              <div class="chart-subtitle">Where visitors come from</div>
+            </div>
+          </div>
+          <canvas id="sourceChart" height="180"></canvas>
+          <div id="sourceLegend" style="margin-top:0.75rem;"></div>
+        </div>
+      </div>
+
+      <!-- Geo + devices row -->
+      <div class="geo-row">
+        <div class="geo-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Visitors by NE State</div>
+              <div class="chart-subtitle">Geographic distribution — last 30 days</div>
+            </div>
+          </div>
+          <div class="ne-map-wrap">
+            <svg viewBox="0 0 400 300" width="100%" style="max-height:220px;">
+              <defs>
+                <radialGradient id="stateGrad1" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#52b788" stop-opacity="0.8"/>
+                  <stop offset="100%" stop-color="#2d6a4f" stop-opacity="0.9"/>
+                </radialGradient>
+              </defs>
+              <!-- States sized/colored by traffic -->
+              <path d="M80 130 L180 110 L240 120 L260 145 L230 170 L150 180 L90 165 Z" fill="#2d6a4f" stroke="#52b788" stroke-width="1.5" opacity="0.95"/>
+              <text x="165" y="148" fill="#b7e4c7" font-size="9" text-anchor="middle" font-family="sans-serif">ASSAM 38%</text>
+              <path d="M200 55 L320 45 L340 85 L300 105 L240 120 L200 100 Z" fill="#1a3a2a" stroke="#52b788" stroke-width="1.5" opacity="0.8"/>
+              <text x="270" y="82" fill="#52b788" font-size="8" text-anchor="middle" font-family="sans-serif">ARUNACHAL 12%</text>
+              <path d="M240 120 L290 110 L310 135 L290 155 L260 145 Z" fill="#40916c" stroke="#52b788" stroke-width="1.5"/>
+              <text x="275" y="136" fill="#d8f3dc" font-size="7" text-anchor="middle" font-family="sans-serif">NAGALAND 9%</text>
+              <path d="M260 145 L300 140 L305 180 L270 195 L250 175 Z" fill="#1a3a2a" stroke="#52b788" stroke-width="1.5"/>
+              <text x="278" y="168" fill="#74c69d" font-size="7" text-anchor="middle" font-family="sans-serif">MANIPUR 11%</text>
+              <path d="M240 180 L275 175 L272 218 L245 228 L228 205 Z" fill="#2d6a4f" stroke="#52b788" stroke-width="1.5"/>
+              <text x="252" y="202" fill="#b7e4c7" font-size="7" text-anchor="middle" font-family="sans-serif">MIZORAM 7%</text>
+              <path d="M170 190 L220 185 L222 218 L185 225 L168 208 Z" fill="#52b788" stroke="#b7e4c7" stroke-width="1.5"/>
+              <text x="196" y="207" fill="#0d2018" font-size="7" text-anchor="middle" font-family="sans-serif">TRIPURA 8%</text>
+              <path d="M100 165 L160 160 L155 195 L110 205 L90 188 Z" fill="#1a3a2a" stroke="#52b788" stroke-width="1.5"/>
+              <text x="125" y="183" fill="#74c69d" font-size="7" text-anchor="middle" font-family="sans-serif">MEGHALAYA 10%</text>
+              <path d="M60 90 L90 83 L95 108 L70 115 L55 102 Z" fill="#74c69d" stroke="#b7e4c7" stroke-width="1.5"/>
+              <text x="75" y="100" fill="#0d2018" font-size="6" text-anchor="middle" font-family="sans-serif">SIKKIM 5%</text>
+              <!-- Tooltip dots for cities -->
+              <circle cx="160" cy="140" r="4" fill="#c9a84c" opacity="0.9"/>
+              <circle cx="280" cy="137" r="3" fill="#e8b84b" opacity="0.7"/>
+            </svg>
+          </div>
+          <div class="region-list" id="regionList"></div>
+        </div>
+
+        <div class="geo-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Device & Platform</div>
+              <div class="chart-subtitle">Visitor device breakdown</div>
+            </div>
+          </div>
+          <canvas id="deviceChart" height="160"></canvas>
+          <div style="margin-top:1rem;">
+            <div class="chart-title" style="margin-bottom:0.5rem;">Top Pages</div>
+            <div id="topPages"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session behaviour table -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Recent Session Activity</div>
+          <input type="search" class="table-search" placeholder="Search by page, region…" oninput="filterTable(this.value)">
+        </div>
+        <div style="overflow-x:auto;">
+          <table aria-label="Recent sessions">
+            <thead>
+              <tr>
+                <th>Page / Path</th>
+                <th>Region</th>
+                <th>Device</th>
+                <th>Duration</th>
+                <th>Session Type</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="sessionTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- end overview -->
+
+    <!-- ─── REPORTS SECTION ─── -->
+    <div class="content-section" id="sec-reports">
+      <div class="report-card">
+        <div class="report-title">Monthly Report Generator</div>
+        <p class="report-desc">Generate a concise one-page monthly performance summary with all traffic, geographic, behavioural, and engagement metrics. Reports are automatically emailed to the administrator's inbox on the last day of each month.</p>
+
+        <div class="report-config">
+          <div class="config-item">
+            <label>Report Period</label>
+            <select id="reportMonth">
+              <option>February 2025</option>
+              <option selected>January 2025</option>
+              <option>December 2024</option>
+              <option>November 2024</option>
+            </select>
+          </div>
+          <div class="config-item">
+            <label>Format</label>
+            <select id="reportFormat">
+              <option>PDF (One Page)</option>
+              <option>HTML Email</option>
+              <option>CSV Data Export</option>
+            </select>
+          </div>
+          <div class="config-item">
+            <label>Include Sections</label>
+            <select id="reportSections">
+              <option>All Sections</option>
+              <option>Traffic Only</option>
+              <option>Geographic Only</option>
+              <option>Custom</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="report-actions">
+          <button class="report-btn gen" onclick="generateReport()">⬡ Generate & Download Report</button>
+          <button class="report-btn preview" onclick="showModal()">👁 Preview Report</button>
+          <button class="report-btn schedule" onclick="scheduleReport()">🗓 Configure Auto-Schedule</button>
+        </div>
+
+        <div class="email-config">
+          <h4>📧 Automated Monthly Email Schedule</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="config-item">
+              <label>Recipient Email</label>
+              <input type="email" value="admin@nestcluster.in" id="recipientEmail">
+            </div>
+            <div class="config-item">
+              <label>CC Email (optional)</label>
+              <input type="email" placeholder="director@nestcluster.in">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:0.75rem;">
+            <div class="config-item">
+              <label>Send On</label>
+              <select>
+                <option selected>Last day of each month</option>
+                <option>1st of next month</option>
+                <option>Fixed date — 28th</option>
+              </select>
+            </div>
+            <div class="config-item">
+              <label>Send Time</label>
+              <input type="time" value="08:00">
+            </div>
+          </div>
+
+          <div class="schedule-status">
+            <span class="schedule-dot"></span>
+            Auto-schedule ACTIVE — Next dispatch: 28 February 2025 at 08:00 AM → admin@nestcluster.in
+          </div>
+
+          <button class="report-btn gen" style="margin-top:1rem;font-size:0.8rem;padding:0.6rem 1.25rem;" onclick="saveSchedule()">
+            Save Schedule Configuration
+          </button>
+        </div>
+      </div>
+
+      <div class="report-card">
+        <div class="report-title">Past Reports Archive</div>
+        <table aria-label="Past reports archive">
+          <thead>
+            <tr>
+              <th>Report Period</th>
+              <th>Generated On</th>
+              <th>Sent To</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>January 2025</td>
+              <td>31 Jan 2025, 08:00 AM</td>
+              <td>admin@nestcluster.in</td>
+              <td><span class="status-badge returning">✓ Delivered</span></td>
+              <td><a href="#" onclick="showModal()" style="color:var(--jade);font-size:0.8rem;">View · Download</a></td>
+            </tr>
+            <tr>
+              <td>December 2024</td>
+              <td>31 Dec 2024, 08:00 AM</td>
+              <td>admin@nestcluster.in</td>
+              <td><span class="status-badge returning">✓ Delivered</span></td>
+              <td><a href="#" onclick="showModal()" style="color:var(--jade);font-size:0.8rem;">View · Download</a></td>
+            </tr>
+            <tr>
+              <td>November 2024</td>
+              <td>30 Nov 2024, 08:00 AM</td>
+              <td>admin@nestcluster.in</td>
+              <td><span class="status-badge returning">✓ Delivered</span></td>
+              <td><a href="#" onclick="showModal()" style="color:var(--jade);font-size:0.8rem;">View · Download</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div><!-- end reports -->
+
+    <!-- ─── PLACEHOLDER SECTIONS ─── -->
+    <div class="content-section" id="sec-traffic">
+      <div class="report-card">
+        <div class="report-title">Traffic Analysis</div>
+        <p class="report-desc">Detailed traffic analysis including referrer data, search keyword performance, campaign tracking, and conversion funnel analysis.</p>
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-header"><div class="chart-title">Traffic Trends — 90 Days</div></div>
+            <canvas id="trafficChart2" height="200"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><div class="chart-title">Search Keywords</div></div>
+            <div id="keywords" style="margin-top:0.5rem;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section" id="sec-geo">
+      <div class="report-card">
+        <div class="report-title">Geographic Intelligence</div>
+        <p class="report-desc">Detailed breakdown of where your visitors come from — by state, district, urban/rural classification, and access device type.</p>
+        <div class="kpi-row">
+          <div class="kpi-card green"><div class="kpi-label">Top State</div><div class="kpi-val">Assam</div><div class="kpi-change up">38% of traffic</div></div>
+          <div class="kpi-card gold"><div class="kpi-label">Rural Visitors</div><div class="kpi-val">34%</div><div class="kpi-change up">↑ 12% growth</div></div>
+          <div class="kpi-card blue"><div class="kpi-label">Mobile (Rural)</div><div class="kpi-val">78%</div><div class="kpi-change up">Mobile-first</div></div>
+          <div class="kpi-card purple"><div class="kpi-label">Intl. Visitors</div><div class="kpi-val">8.2%</div><div class="kpi-change up">↑ 3.1%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section" id="sec-behaviour">
+      <div class="report-card">
+        <div class="report-title">Behaviour Patterns</div>
+        <p class="report-desc">User journey analysis, scroll depth, click heatmaps, session recordings summary, and content engagement metrics.</p>
+        <div class="kpi-row">
+          <div class="kpi-card green"><div class="kpi-label">Avg Pages / Session</div><div class="kpi-val">3.6</div><div class="kpi-change up">↑ 0.4 pages</div></div>
+          <div class="kpi-card gold"><div class="kpi-label">Programmes Page CTR</div><div class="kpi-val">42%</div><div class="kpi-change up">Top clicked</div></div>
+          <div class="kpi-card blue"><div class="kpi-label">Contact Form Converts</div><div class="kpi-val">6.8%</div><div class="kpi-change up">↑ 1.2%</div></div>
+          <div class="kpi-card purple"><div class="kpi-label">Return Visitor Rate</div><div class="kpi-val">28.4%</div><div class="kpi-change up">↑ 4.3%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section" id="sec-content">
+      <div class="report-card">
+        <div class="report-title">Content Manager</div>
+        <p class="report-desc">Manage news, programmes, team members, events and other public content. Changes are reflected on the live site immediately.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <button class="report-btn gen" onclick="alert('CMS Editor coming in full implementation')">+ Add News Article</button>
+          <button class="report-btn gen" onclick="alert('Programme editor coming in full implementation')">+ Add Programme</button>
+          <button class="report-btn preview">Manage Team Members</button>
+          <button class="report-btn preview">Manage Events</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section" id="sec-applications">
+      <div class="report-card">
+        <div class="report-title">Programme Applications</div>
+        <p class="report-desc">Review and manage incoming applications for grants, startup acceleration, fellowships, and capacity building programmes.</p>
+        <div class="kpi-row">
+          <div class="kpi-card green"><div class="kpi-label">New Applications</div><div class="kpi-val">12</div><div class="kpi-change up">This week</div></div>
+          <div class="kpi-card gold"><div class="kpi-label">Under Review</div><div class="kpi-val">34</div><div class="kpi-change">Pending</div></div>
+          <div class="kpi-card blue"><div class="kpi-label">Approved</div><div class="kpi-val">8</div><div class="kpi-change up">This month</div></div>
+          <div class="kpi-card purple"><div class="kpi-label">Total Pipeline</div><div class="kpi-val">₹2.4Cr</div><div class="kpi-change up">Active</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-section" id="sec-users">
+      <div class="report-card">
+        <div class="report-title">Admin Users</div>
+        <p class="report-desc">Manage who has access to this admin portal. Roles: Super Admin, Analytics Viewer, Content Editor, Application Reviewer.</p>
+        <button class="report-btn gen" style="margin-bottom:1rem;">+ Invite Admin User</button>
+        <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Last Login</th><th>Status</th></tr></thead><tbody>
+          <tr><td>NEST Admin</td><td>admin@nestcluster.in</td><td>Super Admin</td><td>Today 09:14</td><td><span class="status-badge returning">Active</span></td></tr>
+          <tr><td>Content Manager</td><td>content@nestcluster.in</td><td>Content Editor</td><td>Yesterday</td><td><span class="status-badge returning">Active</span></td></tr>
+          <tr><td>Analytics Lead</td><td>analytics@nestcluster.in</td><td>Analytics Viewer</td><td>3 days ago</td><td><span class="status-badge returning">Active</span></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+    <div class="content-section" id="sec-settings">
+      <div class="report-card">
+        <div class="report-title">System Configuration</div>
+        <p class="report-desc">Configure analytics tracking, notification preferences, API integrations, and system-wide settings.</p>
+        <div class="report-config">
+          <div class="config-item"><label>Analytics Provider</label><select><option selected>GENORROW Analytics</option><option>Google Analytics 4</option><option>Plausible</option></select></div>
+          <div class="config-item"><label>Session Timeout</label><select><option>30 minutes</option><option selected>1 hour</option><option>4 hours</option></select></div>
+          <div class="config-item"><label>Default Language</label><select><option selected>English</option><option>हिन्दी</option><option>অসমীয়া</option></select></div>
+        </div>
+        <button class="report-btn gen">Save Settings</button>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+
+  <footer class="powered-footer">
+    <span>NEST Admin Portal v2.1</span>
+    <span>·</span>
+    <span>Powered & Secured by</span>
+    <span class="powered-badge">⬡ GENORROW</span>
+  </footer>
+</div><!-- end main -->
+
+<!-- ─── REPORT PREVIEW MODAL ─── -->
+<div class="modal-overlay" id="reportModal" role="dialog" aria-modal="true" aria-label="Report Preview">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Monthly Report Preview — January 2025</div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close preview">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="report-preview">
+        <div class="rp-header">
+          <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:1rem;">
+            <div>
+              <div class="rp-title">NEST Cluster — Website Analytics Report</div>
+              <div class="rp-sub">Period: January 1–31, 2025 &nbsp;·&nbsp; Generated: 31 Jan 2025, 08:00 AM &nbsp;·&nbsp; Auto-dispatched to: admin@nestcluster.in</div>
+            </div>
+            <div style="font-family:monospace;font-size:0.65rem;opacity:0.5;text-align:right;">
+              Secured by GENORROW<br>Report ID: NEST-2025-01
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-section">
+          <h3>Key Performance Metrics</h3>
+          <div class="rp-grid">
+            <div class="rp-kpi"><div class="rp-kpi-val">24,831</div><div class="rp-kpi-label">Total Visitors</div></div>
+            <div class="rp-kpi"><div class="rp-kpi-val">89,204</div><div class="rp-kpi-label">Page Views</div></div>
+            <div class="rp-kpi"><div class="rp-kpi-val">4m 32s</div><div class="rp-kpi-label">Avg. Session</div></div>
+            <div class="rp-kpi"><div class="rp-kpi-val">31.2%</div><div class="rp-kpi-label">Bounce Rate</div></div>
+          </div>
+          <p class="rp-p">Visitor traffic increased by <strong>18.4%</strong> compared to December 2024, with significant growth in engagement metrics. Average session duration improved to 4 minutes 32 seconds, indicating stronger content relevance.</p>
+        </div>
+
+        <div class="rp-section">
+          <h3>Geographic Distribution</h3>
+          <p class="rp-p">Assam led all states with <strong>38%</strong> of total traffic (9,436 visitors), followed by Manipur (11%, 2,731), Arunachal Pradesh (12%, 2,980), Meghalaya (10%, 2,483), Nagaland (9%), Tripura (8%), Mizoram (7%), and Sikkim (5%).</p>
+          <p class="rp-p">Rural access grew to <strong>34%</strong> of total sessions (+12% MoM), with 78% of rural visitors using mobile devices — reaffirming the importance of mobile-first design.</p>
+        </div>
+
+        <div class="rp-section">
+          <h3>Top Pages & Content</h3>
+          <p class="rp-p">Programmes page received highest traffic (42% click-through from home), followed by News & Events (28%), About (18%), and Contact (12%). The February Grant announcement drove a <strong>340% spike</strong> in traffic on 8 Feb.</p>
+        </div>
+
+        <div class="rp-section">
+          <h3>Traffic Sources</h3>
+          <p class="rp-p">Organic search drove 44% of visitors, direct access 28%, social media 14%, referrals from partner institutions 9%, and email campaigns 5%.</p>
+        </div>
+
+        <div class="rp-section">
+          <h3>Recommendations</h3>
+          <p class="rp-p">1. Continue mobile optimisation to serve rural NE audiences. 2. Translate top programme pages into Assamese and Hindi to further expand reach. 3. Create dedicated landing pages for active grant announcements to reduce bounce from direct links. 4. Consider a WhatsApp notification opt-in for programme updates.</p>
+        </div>
+
+        <div class="rp-footer">
+          NEST Cluster · North Eastern Science & Technology Cluster · nestcluster.in<br>
+          This report was auto-generated and dispatched by GENORROW Analytics on 31 January 2025.
+        </div>
+      </div>
+
+      <div style="display:flex;gap:1rem;margin-top:1.5rem;justify-content:flex-end;">
+        <button class="report-btn preview" onclick="closeModal()">Close</button>
+        <button class="report-btn gen" onclick="alert('PDF download ready in full implementation')">⬇ Download PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── SIDEBAR TOGGLE ───
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('collapsed');
+  }
+
+  // ─── SECTION SWITCH ───
+  function showSection(id, btn) {
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => { n.classList.remove('active'); n.removeAttribute('aria-current'); });
+    document.getElementById('sec-' + id).classList.add('active');
+    btn.classList.add('active'); btn.setAttribute('aria-current', 'page');
+    const titles = { overview:'Analytics Overview', traffic:'Traffic Analysis', geo:'Geographic Data', behaviour:'Behaviour Patterns', reports:'Reports & Export', content:'Content Manager', applications:'Applications', users:'Admin Users', settings:'Configuration' };
+    document.getElementById('pageTitle').textContent = titles[id] || id;
+    document.getElementById('breadcrumbCurrent').textContent = titles[id] || id;
+    if (id === 'traffic') initTrafficChart2();
+  }
+
+  // ─── MODAL ───
+  function showModal() { document.getElementById('reportModal').classList.add('open'); }
+  function closeModal() { document.getElementById('reportModal').classList.remove('open'); }
+  document.getElementById('reportModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+  // ─── REPORT ACTIONS ───
+  function generateReport() {
+    const btn = event.target;
+    btn.textContent = '⏳ Generating…';
+    setTimeout(() => {
+      btn.textContent = '✓ Report Generated — Download Started';
+      btn.style.background = '#059669';
+      setTimeout(() => { btn.textContent = '⬡ Generate & Download Report'; btn.style.background = ''; }, 4000);
+      showModal();
+    }, 1800);
+  }
+  function scheduleReport() {
+    alert('Auto-schedule already active! Report will be sent to admin@nestcluster.in on the last day of each month at 08:00 AM. To modify, update the Email Schedule settings below.');
+  }
+  function saveSchedule() {
+    const email = document.getElementById('recipientEmail').value;
+    alert('✓ Schedule saved! Monthly report will be sent to ' + email + ' on the last day of each month at 08:00 AM.');
+  }
+
+  // ─── LIVE VISITORS SIMULATION ───
+  function updateLive() {
+    const v = document.getElementById('liveVisitors');
+    const s = document.getElementById('activeSessions');
+    if (v) v.textContent = Math.floor(35 + Math.random() * 30);
+    if (s) s.textContent = Math.floor(80 + Math.random() * 60);
+    document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+  }
+  setInterval(updateLive, 5000);
+
+  // ─── CHART.JS ───
+  const chartDefaults = {
+    font: { family: "'DM Sans', sans-serif" },
+    color: '#6b7280'
+  };
+  Chart.defaults.font.family = chartDefaults.font.family;
+
+  // Traffic Line Chart
+  const days = [];
+  const values = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    days.push(d.toLocaleDateString('en', {month:'short',day:'numeric'}));
+    values.push(Math.floor(500 + Math.random() * 800 + Math.sin(i/5) * 200));
+  }
+
+  const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+  const trafficChart = new Chart(trafficCtx, {
+    type: 'line',
+    data: {
+      labels: days,
+      datasets: [{
+        label: 'Daily Visitors',
+        data: values,
+        borderColor: '#52b788',
+        backgroundColor: 'rgba(82,183,136,0.06)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: '#52b788'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: 'rgba(45,106,79,0.05)' }, ticks: { maxTicksLimit: 8, font: { size: 11 } } },
+        y: { grid: { color: 'rgba(45,106,79,0.05)' }, ticks: { font: { size: 11 } } }
+      }
+    }
+  });
+
+  // Source Doughnut
+  const sourceCtx = document.getElementById('sourceChart').getContext('2d');
+  new Chart(sourceCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Organic Search', 'Direct', 'Social Media', 'Referral', 'Email'],
+      datasets: [{
+        data: [44, 28, 14, 9, 5],
+        backgroundColor: ['#2d6a4f', '#52b788', '#c9a84c', '#3b82f6', '#8b5cf6'],
+        borderWidth: 0, hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { usePointStyle: true, pointStyleWidth: 8, padding: 12, font: { size: 11 } } }
+      },
+      cutout: '68%'
+    }
+  });
+
+  // Device Doughnut
+  const deviceCtx = document.getElementById('deviceChart').getContext('2d');
+  new Chart(deviceCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Mobile', 'Desktop', 'Tablet'],
+      datasets: [{
+        data: [61, 32, 7],
+        backgroundColor: ['#2d6a4f', '#52b788', '#c9a84c'],
+        borderWidth: 0, hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { usePointStyle: true, padding: 10, font: { size: 11 } } }
+      },
+      cutout: '65%'
+    }
+  });
+
+  // ─── REGION LIST ───
+  const regions = [
+    { name: 'Assam', pct: 38, count: '9,436' },
+    { name: 'Arunachal Pradesh', pct: 12, count: '2,980' },
+    { name: 'Manipur', pct: 11, count: '2,731' },
+    { name: 'Meghalaya', pct: 10, count: '2,483' },
+    { name: 'Nagaland', pct: 9, count: '2,235' },
+    { name: 'Tripura', pct: 8, count: '1,986' },
+    { name: 'Mizoram', pct: 7, count: '1,738' },
+    { name: 'Sikkim', pct: 5, count: '1,242' },
+  ];
+  const rl = document.getElementById('regionList');
+  regions.forEach(r => {
+    rl.innerHTML += `
+      <div class="region-item">
+        <span class="region-name">${r.name}</span>
+        <div class="region-bar-wrap"><div class="region-bar" style="width:${r.pct}%"></div></div>
+        <span class="region-count">${r.count}</span>
+        <span class="region-pct">${r.pct}%</span>
+      </div>`;
+  });
+
+  // ─── TOP PAGES ───
+  const pages = [
+    { path: '/programmes', views: '22,401', bounce: '28%' },
+    { path: '/news', views: '18,344', bounce: '35%' },
+    { path: '/', views: '15,228', bounce: '22%' },
+    { path: '/about', views: '9,112', bounce: '40%' },
+    { path: '/contact', views: '6,893', bounce: '18%' },
+  ];
+  const tp = document.getElementById('topPages');
+  pages.forEach((p, i) => {
+    tp.innerHTML += `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.35rem 0;border-bottom:1px solid rgba(45,106,79,0.06);font-size:0.78rem;">
+      <span style="color:var(--jade);font-family:monospace;">${p.path}</span>
+      <span style="color:var(--text-2);">${p.views}</span>
+    </div>`;
+  });
+
+  // ─── SESSION TABLE ───
+  const sessionData = [
+    { page: '/programmes', region: 'Guwahati, Assam', device: 'Mobile', duration: '6:12', type: 'returning', time: '2 min ago' },
+    { page: '/about', region: 'Imphal, Manipur', device: 'Desktop', duration: '3:45', type: 'new', time: '5 min ago' },
+    { page: '/', region: 'Shillong, Meghalaya', device: 'Mobile', duration: '1:20', type: 'bounce', time: '7 min ago' },
+    { page: '/news', region: 'Kohima, Nagaland', device: 'Mobile', duration: '8:02', type: 'returning', time: '9 min ago' },
+    { page: '/contact', region: 'Agartala, Tripura', device: 'Desktop', duration: '4:33', type: 'new', time: '11 min ago' },
+    { page: '/programmes', region: 'Itanagar, Arunachal', device: 'Tablet', duration: '5:18', type: 'returning', time: '14 min ago' },
+    { page: '/', region: 'Aizawl, Mizoram', device: 'Mobile', duration: '2:10', type: 'new', time: '16 min ago' },
+    { page: '/news', region: 'Gangtok, Sikkim', device: 'Desktop', duration: '7:44', type: 'returning', time: '20 min ago' },
+  ];
+  const st = document.getElementById('sessionTable');
+  sessionData.forEach(s => {
+    const badge = s.type === 'new' ? 'new' : s.type === 'bounce' ? 'bounce' : 'returning';
+    const label = s.type === 'new' ? 'New' : s.type === 'bounce' ? 'Bounce' : 'Returning';
+    st.innerHTML += `<tr>
+      <td style="color:var(--jade);font-family:monospace;font-size:0.8rem;">${s.page}</td>
+      <td>${s.region}</td>
+      <td>${s.device}</td>
+      <td>${s.duration}</td>
+      <td><span class="status-badge ${badge}">${label}</span></td>
+      <td style="color:var(--text-2);">${s.time}</td>
+    </tr>`;
+  });
+
+  function filterTable(q) {
+    const rows = document.querySelectorAll('#sessionTable tr');
+    rows.forEach(r => {
+      r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+    });
+  }
+
+  // ─── TRAFFIC CHART 2 ───
+  function initTrafficChart2() {
+    const ctx2 = document.getElementById('trafficChart2');
+    if (!ctx2 || ctx2.dataset.init) return;
+    ctx2.dataset.init = '1';
+    const d2 = [], v2 = [];
+    for (let i = 89; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      d2.push(i % 7 === 0 ? d.toLocaleDateString('en',{month:'short',day:'numeric'}) : '');
+      v2.push(Math.floor(400 + Math.random() * 900 + Math.cos(i/8) * 250));
+    }
+    new Chart(ctx2.getContext('2d'), {
+      type: 'bar',
+      data: { labels: d2, datasets: [{ data: v2, backgroundColor: 'rgba(82,183,136,0.5)', borderRadius: 2, borderSkipped: false }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(45,106,79,0.05)' } } } }
+    });
+
+    const kw = document.getElementById('keywords');
+    if (kw) {
+      const keywords = [
+        { kw: 'NEST cluster northeast', clicks: 2840 },
+        { kw: 'science technology NE India', clicks: 1920 },
+        { kw: 'research grant northeast india', clicks: 1540 },
+        { kw: 'startup incubation Assam', clicks: 1280 },
+        { kw: 'NEST programme apply', clicks: 980 },
+      ];
+      keywords.forEach(k => {
+        kw.innerHTML += `<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(45,106,79,0.06);font-size:0.8rem;">
+          <span style="color:var(--forest);">${k.kw}</span>
+          <span style="font-family:monospace;color:var(--jade);">${k.clicks.toLocaleString()}</span>
+        </div>`;
+      });
+    }
+  }
+
+  // ─── DATE RANGE ───
+  function updateDateRange(days) {
+    // In production, refetch data for period
+    console.log('Updating to', days, 'days');
+  }
+
+  // ─── CHART PERIOD SWITCH ───
+  function switchChartPeriod(period, btn) {
+    document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const newData = values.map(v => period === 'weekly' ? Math.round(v * 7 * (0.9 + Math.random()*0.2)) : period === 'monthly' ? Math.round(v * 30 * (0.85 + Math.random()*0.3)) : v);
+    trafficChart.data.datasets[0].data = newData;
+    trafficChart.update('active');
+  }
+</script>
+</body>
+</html>

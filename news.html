@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News & Events — NEST Cluster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#0d1117; --forest:#1a3a2a; --jade:#2d6a4f; --moss:#52b788;
+    --mist:#b7e4c7; --cream:#faf7f2; --gold:#c9a84c; --fog:#f0ede8;
+    --serif:'Cormorant Garamond',serif; --sans:'DM Sans',sans-serif; --mono:'Space Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--cream);color:var(--ink);}
+
+  /* Reuse nav from index */
+  nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;height:72px;background:rgba(250,247,242,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(45,106,79,0.1);}
+  .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+  .nav-logo-mark{width:38px;height:38px;background:var(--forest);border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative;}
+  .nav-logo-mark::before{content:'';position:absolute;width:20px;height:20px;border:2px solid var(--gold);border-radius:50%;}
+  .nav-logo-mark::after{content:'';position:absolute;width:7px;height:7px;background:var(--moss);border-radius:50%;}
+  .nav-logo strong{font-family:var(--serif);font-size:1.2rem;font-weight:700;color:var(--forest);}
+  .nav-links{display:flex;align-items:center;gap:2rem;list-style:none;}
+  .nav-links a{font-size:0.875rem;font-weight:500;color:var(--forest);text-decoration:none;transition:color 0.2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--jade);}
+  .nav-cta{background:var(--forest)!important;color:var(--cream)!important;padding:0.5rem 1.25rem;border-radius:6px;}
+
+  /* Page header */
+  .page-header{background:var(--forest);padding:5rem 5vw 4rem;position:relative;overflow:hidden;}
+  .page-header::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(82,183,136,0.06) 1.5px,transparent 1.5px);background-size:28px 28px;}
+  .page-header-inner{max-width:1280px;margin:0 auto;position:relative;z-index:1;}
+  .page-header-tag{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--moss);margin-bottom:0.75rem;display:flex;align-items:center;gap:8px;}
+  .page-header-tag::before{content:'';width:20px;height:1px;background:var(--moss);}
+  .page-header h1{font-family:var(--serif);font-size:clamp(2.5rem,5vw,4.5rem);font-weight:300;color:var(--cream);line-height:1.05;}
+  .page-header h1 strong{font-weight:700;}
+  .page-header-desc{font-size:1rem;color:rgba(250,247,242,0.6);margin-top:1rem;max-width:500px;line-height:1.7;}
+
+  /* Filters */
+  .filters-bar{background:white;border-bottom:1px solid rgba(45,106,79,0.08);position:sticky;top:72px;z-index:50;}
+  .filters-inner{max-width:1280px;margin:0 auto;padding:0 5vw;display:flex;align-items:center;gap:1rem;height:60px;overflow-x:auto;}
+  .filter-btn{padding:0.45rem 1.1rem;border-radius:20px;border:1.5px solid rgba(45,106,79,0.12);background:transparent;font-family:var(--sans);font-size:0.8rem;font-weight:500;color:#6b7280;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+  .filter-btn.active{background:var(--forest);color:var(--cream);border-color:var(--forest);}
+  .filter-btn:hover:not(.active){border-color:var(--moss);color:var(--jade);}
+  .filter-search{margin-left:auto;padding:0.5rem 1rem;border:1.5px solid rgba(45,106,79,0.12);border-radius:20px;font-size:0.82rem;font-family:var(--sans);outline:none;min-width:200px;color:var(--ink);}
+  .filter-search:focus{border-color:var(--moss);}
+
+  /* Main grid */
+  .news-main{max-width:1280px;margin:0 auto;padding:4rem 5vw;}
+  .news-layout{display:grid;grid-template-columns:2fr 1fr;gap:3rem;align-items:start;}
+
+  /* Article cards */
+  .articles-grid{display:flex;flex-direction:column;gap:2rem;}
+  .article-card{display:grid;grid-template-columns:200px 1fr;gap:0;border:1.5px solid rgba(45,106,79,0.08);border-radius:14px;overflow:hidden;background:white;text-decoration:none;color:inherit;transition:all 0.3s;}
+  .article-card:hover{border-color:var(--moss);box-shadow:0 8px 32px rgba(26,58,42,0.08);transform:translateY(-2px);}
+  .article-card.featured{grid-template-columns:1fr;display:block;}
+  .article-img{background:linear-gradient(135deg,var(--jade) 0%,var(--forest) 100%);display:flex;align-items:center;justify-content:center;}
+  .article-card.featured .article-img{height:260px;}
+  .article-img-label{position:absolute;top:1rem;left:1rem;background:var(--gold);color:var(--forest);font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.7rem;border-radius:3px;}
+  .article-img-wrap{position:relative;}
+  .article-body{padding:1.5rem;}
+  .article-card.featured .article-body{padding:2rem;}
+  .article-tags{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.75rem;}
+  .article-tag{font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:3px;background:rgba(45,106,79,0.06);color:var(--jade);}
+  .article-title{font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--forest);line-height:1.2;margin-bottom:0.5rem;}
+  .article-card.featured .article-title{font-size:1.75rem;}
+  .article-excerpt{font-size:0.85rem;color:#6b7280;line-height:1.65;margin-bottom:1rem;}
+  .article-meta{display:flex;align-items:center;gap:1rem;font-size:0.75rem;color:#9ca3af;}
+  .article-meta-sep{color:rgba(45,106,79,0.2);}
+  .article-read{font-size:0.8rem;color:var(--jade);font-weight:500;margin-top:0.75rem;display:inline-flex;align-items:center;gap:4px;}
+
+  /* Sidebar */
+  .news-sidebar{display:flex;flex-direction:column;gap:1.5rem;position:sticky;top:132px;}
+  .sidebar-widget{background:white;border:1.5px solid rgba(45,106,79,0.08);border-radius:12px;overflow:hidden;}
+  .widget-header{padding:1rem 1.25rem;border-bottom:1px solid rgba(45,106,79,0.06);font-size:0.82rem;font-weight:600;color:var(--forest);display:flex;align-items:center;gap:6px;}
+  .widget-body{padding:1rem 1.25rem;}
+
+  .event-item{padding:0.75rem 0;border-bottom:1px solid rgba(45,106,79,0.06);display:flex;gap:0.75rem;align-items:flex-start;}
+  .event-item:last-child{border-bottom:none;}
+  .event-date-badge{background:var(--forest);color:var(--cream);border-radius:8px;width:44px;text-align:center;padding:0.3rem;flex-shrink:0;}
+  .event-date-badge .day{font-family:var(--serif);font-size:1.25rem;font-weight:700;line-height:1;color:var(--moss);}
+  .event-date-badge .mon{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(250,247,242,0.5);}
+  .event-name{font-size:0.82rem;font-weight:500;color:var(--forest);line-height:1.3;margin-bottom:2px;}
+  .event-loc{font-size:0.72rem;color:#9ca3af;}
+
+  .newsletter-box{background:linear-gradient(135deg,var(--forest) 0%,var(--jade) 100%);border-radius:12px;padding:1.5rem;}
+  .newsletter-box h3{font-family:var(--serif);font-size:1.25rem;color:var(--cream);margin-bottom:0.35rem;}
+  .newsletter-box p{font-size:0.8rem;color:rgba(250,247,242,0.6);margin-bottom:1rem;line-height:1.6;}
+  .newsletter-input{width:100%;padding:0.7rem 1rem;border-radius:7px;border:none;font-size:0.85rem;font-family:var(--sans);margin-bottom:0.75rem;outline:none;}
+  .newsletter-btn{width:100%;padding:0.7rem;border-radius:7px;background:var(--gold);color:var(--forest);border:none;font-family:var(--sans);font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+  .newsletter-btn:hover{background:var(--amber);transform:translateY(-1px);}
+
+  /* Pagination */
+  .pagination{display:flex;align-items:center;gap:0.5rem;margin-top:3rem;}
+  .page-btn{width:38px;height:38px;border-radius:8px;border:1.5px solid rgba(45,106,79,0.12);background:transparent;font-family:var(--sans);font-size:0.85rem;cursor:pointer;color:var(--forest);transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
+  .page-btn.active{background:var(--forest);color:var(--cream);border-color:var(--forest);}
+  .page-btn:hover:not(.active){border-color:var(--moss);color:var(--jade);}
+
+  /* Footer */
+  footer{background:var(--ink);color:rgba(250,247,242,0.5);padding:3rem 5vw;text-align:center;font-size:0.8rem;}
+  .footer-powered{display:inline-flex;align-items:center;gap:8px;margin-top:0.75rem;}
+  .footer-powered-badge{background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);color:var(--gold);font-family:var(--mono);font-size:0.62rem;font-weight:700;letter-spacing:0.1em;padding:2px 8px;border-radius:3px;}
+
+  @media(max-width:1024px){.news-layout{grid-template-columns:1fr;}.news-sidebar{position:static;top:auto;}}
+  @media(max-width:768px){.article-card{grid-template-columns:1fr;}.article-img{height:160px;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-mark" aria-hidden="true"></div>
+    <div style="line-height:1.1;"><strong>NEST</strong><br><span style="font-size:0.6rem;color:var(--jade);letter-spacing:0.1em;text-transform:uppercase;">Science & Technology Cluster</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#focus">Focus Areas</a></li>
+    <li><a href="index.html#programmes">Programmes</a></li>
+    <li><a href="news.html" class="active">News</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="admin-login.html" style="font-family:var(--mono);font-size:0.72rem;color:var(--gold);border:1px solid rgba(201,168,76,0.3);padding:0.35rem 0.9rem;border-radius:4px;">⬡ Admin</a></li>
+  </ul>
+</nav>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-header-tag">Latest Updates</div>
+    <h1>News & <strong>Events</strong></h1>
+    <p class="page-header-desc">Stay updated with the latest from NEST Cluster — research breakthroughs, programme announcements, events, and stories from across Northeast India.</p>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="filters-bar">
+  <div class="filters-inner">
+    <button class="filter-btn active" onclick="filterNews('all',this)">All</button>
+    <button class="filter-btn" onclick="filterNews('research',this)">Research</button>
+    <button class="filter-btn" onclick="filterNews('startup',this)">Startups</button>
+    <button class="filter-btn" onclick="filterNews('event',this)">Events</button>
+    <button class="filter-btn" onclick="filterNews('grant',this)">Grants</button>
+    <button class="filter-btn" onclick="filterNews('policy',this)">Policy</button>
+    <button class="filter-btn" onclick="filterNews('community',this)">Community</button>
+    <input class="filter-search" type="search" placeholder="🔍  Search news…">
+  </div>
+</div>
+
+<!-- Main content -->
+<div class="news-main">
+  <div class="news-layout">
+    <!-- Articles -->
+    <div class="articles-grid" id="articlesGrid">
+
+      <!-- Featured -->
+      <a href="#" class="article-card featured" data-category="research">
+        <div class="article-img-wrap">
+          <div class="article-img" style="height:260px;position:relative;">
+            <div class="article-img-label">FEATURED STORY</div>
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" opacity="0.2">
+              <circle cx="30" cy="30" r="25" stroke="white" stroke-width="1.5"/>
+              <line x1="30" y1="5" x2="30" y2="55" stroke="white" stroke-width="1"/>
+              <line x1="5" y1="30" x2="55" y2="30" stroke="white" stroke-width="1"/>
+            </svg>
+          </div>
+        </div>
+        <div class="article-body">
+          <div class="article-tags">
+            <span class="article-tag">Research</span>
+            <span class="article-tag">Water Tech</span>
+            <span class="article-tag">Assam</span>
+          </div>
+          <h2 class="article-title">NEST-Funded Team Develops Low-Cost Water Purification Technology for Flood-Prone Districts</h2>
+          <p class="article-excerpt">A research team from Tezpur University, supported by NEST's Core Research Fund, has successfully trialled a ceramic-based water filter deployable within 24 hours in disaster-affected zones. The technology, developed over 18 months, can purify 10,000 litres daily at a cost of ₹400 per unit.</p>
+          <div class="article-meta">
+            <span>Dr. Priya Hazarika, Tezpur University</span>
+            <span class="article-meta-sep">·</span>
+            <span>25 February 2025</span>
+            <span class="article-meta-sep">·</span>
+            <span>4 min read</span>
+          </div>
+          <span class="article-read">Read full story →</span>
+        </div>
+      </a>
+
+      <!-- Regular cards -->
+      <a href="#" class="article-card" data-category="event">
+        <div class="article-img-wrap" style="min-height:140px;">
+          <div class="article-img" style="height:100%;min-height:140px;background:linear-gradient(135deg,#c9a84c,#1a3a2a);">
+          </div>
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="article-tag">Event</span><span class="article-tag">Summit</span></div>
+          <h2 class="article-title">NEST Annual Technology Summit 2025 — Guwahati, March 28–30</h2>
+          <p class="article-excerpt">Northeast India's largest science and technology convening. 3 days, 80+ speakers, 20 workshops. Early-bird registration open until March 10.</p>
+          <div class="article-meta"><span>12 February 2025</span><span class="article-meta-sep">·</span><span>2 min read</span></div>
+          <span class="article-read">Register now →</span>
+        </div>
+      </a>
+
+      <a href="#" class="article-card" data-category="grant">
+        <div class="article-img-wrap" style="min-height:140px;">
+          <div class="article-img" style="height:100%;min-height:140px;background:linear-gradient(135deg,#2d6a4f,#52b788);">
+          </div>
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="article-tag">Grant</span><span class="article-tag">Agriculture</span></div>
+          <h2 class="article-title">₹8.2 Crore Agri-Innovation Fund Launched for Northeast Farmers and Agri-Tech Innovators</h2>
+          <p class="article-excerpt">NEST launches its largest-ever agriculture technology fund, prioritising precision farming, cold storage, and indigenous crop documentation projects.</p>
+          <div class="article-meta"><span>08 February 2025</span><span class="article-meta-sep">·</span><span>3 min read</span></div>
+          <span class="article-read">Apply now →</span>
+        </div>
+      </a>
+
+      <a href="#" class="article-card" data-category="startup">
+        <div class="article-img-wrap" style="min-height:140px;">
+          <div class="article-img" style="height:100%;min-height:140px;background:linear-gradient(135deg,#3b82f6,#1a3a2a);">
+          </div>
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="article-tag">Startup</span><span class="article-tag">Achievement</span></div>
+          <h2 class="article-title">NEST Startup AquaGen Secures Series A Funding; Plans Expansion to Four NE States</h2>
+          <p class="article-excerpt">AquaGen, incubated through NEST's Accelerator Programme in 2023, has raised ₹3.8 Crore in Series A from a consortium of NE-focused impact investors.</p>
+          <div class="article-meta"><span>31 January 2025</span><span class="article-meta-sep">·</span><span>3 min read</span></div>
+          <span class="article-read">Read story →</span>
+        </div>
+      </a>
+
+      <a href="#" class="article-card" data-category="policy">
+        <div class="article-img-wrap" style="min-height:140px;">
+          <div class="article-img" style="height:100%;min-height:140px;background:linear-gradient(135deg,#8b5cf6,#1a3a2a);">
+          </div>
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="article-tag">Policy</span><span class="article-tag">Partnership</span></div>
+          <h2 class="article-title">NEST Signs MoU with CSIR for Joint Research Infrastructure Across Northeast India</h2>
+          <p class="article-excerpt">A landmark memorandum enables shared use of CSIR laboratory equipment, joint fellowship programmes, and collaborative publications between the two institutions.</p>
+          <div class="article-meta"><span>22 January 2025</span><span class="article-meta-sep">·</span><span>2 min read</span></div>
+          <span class="article-read">Read more →</span>
+        </div>
+      </a>
+
+      <a href="#" class="article-card" data-category="community">
+        <div class="article-img-wrap" style="min-height:140px;">
+          <div class="article-img" style="height:100%;min-height:140px;background:linear-gradient(135deg,#059669,#1a3a2a);">
+          </div>
+        </div>
+        <div class="article-body">
+          <div class="article-tags"><span class="article-tag">Community</span><span class="article-tag">Meghalaya</span></div>
+          <h2 class="article-title">Rural Technology Literacy Programme Reaches 12,000 People Across Ri Bhoi District</h2>
+          <p class="article-excerpt">NEST's bilingual digital literacy programme, delivered in English and Khasi, has successfully trained 12,000 rural residents across 47 villages in Ri Bhoi district.</p>
+          <div class="article-meta"><span>15 January 2025</span><span class="article-meta-sep">·</span><span>3 min read</span></div>
+          <span class="article-read">Read story →</span>
+        </div>
+      </a>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <span style="color:#9ca3af;font-size:0.85rem;">…</span>
+        <button class="page-btn">8</button>
+        <button class="page-btn" style="width:auto;padding:0 1rem;">Next →</button>
+      </div>
+
+    </div><!-- articles grid -->
+
+    <!-- Sidebar -->
+    <aside class="news-sidebar">
+
+      <!-- Upcoming events widget -->
+      <div class="sidebar-widget">
+        <div class="widget-header">📅 Upcoming Events</div>
+        <div class="widget-body">
+          <div class="event-item">
+            <div class="event-date-badge"><div class="day">28</div><div class="mon">Mar</div></div>
+            <div><div class="event-name">NEST Annual Tech Summit 2025</div><div class="event-loc">📍 Guwahati, Assam</div></div>
+          </div>
+          <div class="event-item">
+            <div class="event-date-badge"><div class="day">10</div><div class="mon">Apr</div></div>
+            <div><div class="event-name">Young Scientist Fellowship — Last Date</div><div class="event-loc">📍 Online / All States</div></div>
+          </div>
+          <div class="event-item">
+            <div class="event-date-badge"><div class="day">18</div><div class="mon">Apr</div></div>
+            <div><div class="event-name">Rural Tech Literacy Workshop</div><div class="event-loc">📍 Kohima, Nagaland</div></div>
+          </div>
+          <div class="event-item">
+            <div class="event-date-badge"><div class="day">02</div><div class="mon">May</div></div>
+            <div><div class="event-name">Science Leadership Summit 2025</div><div class="event-loc">📍 Shillong, Meghalaya</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Newsletter widget -->
+      <div class="newsletter-box">
+        <h3>Stay Informed</h3>
+        <p>Get the latest NEST news, grant announcements and event updates straight to your inbox. Available in English, Hindi and Assamese.</p>
+        <input class="newsletter-input" type="email" placeholder="your@email.com">
+        <button class="newsletter-btn" onclick="subscribeNewsletter()">Subscribe to Newsletter →</button>
+      </div>
+
+      <!-- Quick links -->
+      <div class="sidebar-widget">
+        <div class="widget-header">🔗 Quick Links</div>
+        <div class="widget-body" style="display:flex;flex-direction:column;gap:0.5rem;">
+          <a href="#" style="font-size:0.82rem;color:var(--jade);text-decoration:none;padding:0.4rem 0;border-bottom:1px solid rgba(45,106,79,0.06);">→ Download Media Kit</a>
+          <a href="#" style="font-size:0.82rem;color:var(--jade);text-decoration:none;padding:0.4rem 0;border-bottom:1px solid rgba(45,106,79,0.06);">→ Annual Report 2024</a>
+          <a href="#" style="font-size:0.82rem;color:var(--jade);text-decoration:none;padding:0.4rem 0;border-bottom:1px solid rgba(45,106,79,0.06);">→ Research Publications</a>
+          <a href="#" style="font-size:0.82rem;color:var(--jade);text-decoration:none;padding:0.4rem 0;">→ Press Contact</a>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>© 2025 NEST Cluster — North Eastern Science & Technology Cluster</div>
+  <div class="footer-powered">
+    Powered & Secured by <span class="footer-powered-badge">⬡ GENORROW</span>
+  </div>
+</footer>
+
+<script>
+  function filterNews(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.article-card').forEach(card => {
+      if (cat === 'all' || card.dataset.category === cat) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  function subscribeNewsletter() {
+    const input = document.querySelector('.newsletter-input');
+    if (input.value.includes('@')) {
+      input.value = '';
+      input.placeholder = '✓ Subscribed! Check your inbox.';
+      setTimeout(() => { input.placeholder = 'your@email.com'; }, 4000);
+    }
+  }
+</script>
+</body>
+</html>
