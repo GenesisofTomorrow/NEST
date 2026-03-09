@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="North-Eastern Science & Technology (NEST) Cluster — A Government of India initiative under the Ministry of Science & Technology catalysing research, innovation and enterprise across the eight states of Northeast India.">
+  <meta name="keywords" content="NEST Cluster, Northeast India science, technology, research grants, incubation, Assam, Arunachal Pradesh, Manipur, Meghalaya, Nagaland, Mizoram, Tripura, Sikkim">
+  <meta name="author" content="NEST Cluster Secretariat, Government of India">
+  <meta property="og:title" content="NEST Cluster — North-Eastern Science & Technology">
+  <meta property="og:description" content="Catalysing scientific excellence and innovation across Northeast India's eight states.">
+  <meta property="og:type" content="website">
+  <title>NEST Cluster — North-Eastern Science &amp; Technology</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/nav.css">
+  <link rel="stylesheet" href="css/sections.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     PAGE LOADER
+══════════════════════════════════════ -->
+<div class="page-loader" id="page-loader" aria-hidden="true">
+  <div class="page-loader__ring"></div>
+  <div class="page-loader__name">NEST Cluster</div>
+  <div class="page-loader__text">Initialising</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     ADMIN DASHBOARD SHELL
+══════════════════════════════════════ -->
+<div class="admin-shell" id="admin-shell" role="application" aria-label="NEST Admin Dashboard">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" aria-label="Admin navigation">
+    <div class="admin-sidebar__head">
+      <div class="admin-sidebar__logo-mark">
+        <svg viewBox="0 0 20 20"><path d="M10 1L18 6V14L10 19L2 14V6L10 1Z"/></svg>
+      </div>
+      <div>
+        <div class="admin-sidebar__title">NEST Admin</div>
+        <span class="admin-sidebar__sub">Analytics & Management</span>
+      </div>
+    </div>
+
+    <nav class="admin-nav-group">
+      <div class="admin-nav-group__label">Overview</div>
+      <a class="admin-nav-item active" href="#" data-panel="dashboard">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a class="admin-nav-item" href="#" data-panel="analytics">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Traffic Analytics
+      </a>
+      <a class="admin-nav-item" href="#" data-panel="geography">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Geographic Distribution
+      </a>
+    </nav>
+
+    <nav class="admin-nav-group">
+      <div class="admin-nav-group__label">Reports</div>
+      <a class="admin-nav-item" href="#" data-panel="monthly">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Monthly Reports
+      </a>
+      <a class="admin-nav-item" href="#" data-panel="behaviour">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Behaviour Patterns
+      </a>
+    </nav>
+
+    <nav class="admin-nav-group">
+      <div class="admin-nav-group__label">Management</div>
+      <a class="admin-nav-item" href="#" data-panel="users">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        User Accounts
+      </a>
+      <a class="admin-nav-item" href="#" data-panel="content">
+        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Content Manager
+      </a>
+      <a class="admin-nav-item" href="#" data-panel="settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="admin-sidebar__footer">
+      <div class="admin-status-badge">
+        <div class="admin-status-badge__row">
+          <div class="admin-status-badge__dot"></div>
+          Agent Layer — Active
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.56rem;color:rgba(255,255,255,0.3);margin-top:3px;">
+          Governance: GENORROW Shield
+        </div>
+      </div>
+      <button class="btn admin-btn admin-btn--ghost" style="width:100%;" data-admin-exit>
+        Back to Public Site
+      </button>
+    </div>
+  </aside>
+
+  <!-- Admin Main -->
+  <main class="admin-main" id="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-topbar__title" id="admin-main-title">Overview Dashboard</div>
+        <div class="admin-topbar__sub">March 2026 &nbsp;·&nbsp; Live data &nbsp;·&nbsp; Auto-refreshes every 60 seconds</div>
+      </div>
+      <div class="admin-topbar__actions">
+        <button class="admin-btn admin-btn--ghost" onclick="generateReport()">Generate Report</button>
+        <button class="admin-btn admin-btn--gold" onclick="mailReport()">Mail Monthly Brief</button>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-card__label">Total Visitors</div>
+        <div class="kpi-card__value" id="kpi-visitors">48,312</div>
+        <span class="kpi-card__delta kpi-card__delta--up">+14.2% vs prior month</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__label">Page Sessions</div>
+        <div class="kpi-card__value" id="kpi-sessions">1,24,680</div>
+        <span class="kpi-card__delta kpi-card__delta--up">+9.8%</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__label">Avg. Session Duration</div>
+        <div class="kpi-card__value">4:37</div>
+        <span class="kpi-card__delta kpi-card__delta--up">+22s</span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-card__label">Bounce Rate</div>
+        <div class="kpi-card__value">28.4%</div>
+        <span class="kpi-card__delta kpi-card__delta--dn">−3.1%</span>
+      </div>
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="admin-chart-row">
+      <div class="admin-chart-card">
+        <div class="admin-chart-card__title">Monthly Traffic Volume</div>
+        <div class="admin-chart-card__sub">Unique visitors — last 12 months</div>
+        <div class="bar-chart-wrap" id="traffic-bar-chart"></div>
+      </div>
+      <div class="admin-chart-card">
+        <div class="admin-chart-card__title">Device Breakdown</div>
+        <div class="admin-chart-card__sub">Sessions by device type</div>
+        <div class="donut-container">
+          <svg class="donut-svg" viewBox="0 0 42 42" aria-label="Device chart">
+            <circle cx="21" cy="21" r="15.9" fill="none" stroke="#1a2840" stroke-width="9"/>
+            <circle cx="21" cy="21" r="15.9" fill="none" stroke="#243b56" stroke-width="9"
+              stroke-dasharray="52 48" stroke-dashoffset="25"/>
+            <circle cx="21" cy="21" r="15.9" fill="none" stroke="#b8963e" stroke-width="9"
+              stroke-dasharray="28 72" stroke-dashoffset="-27"/>
+            <circle cx="21" cy="21" r="15.9" fill="none" stroke="#3d5470" stroke-width="9"
+              stroke-dasharray="20 80" stroke-dashoffset="-55"/>
+          </svg>
+          <div class="donut-legend">
+            <div class="donut-legend-item">
+              <div class="donut-legend-swatch" style="background:#243b56;"></div>
+              <span class="donut-legend-label">Mobile</span>
+              <span class="donut-legend-val">52%</span>
+            </div>
+            <div class="donut-legend-item">
+              <div class="donut-legend-swatch" style="background:#b8963e;"></div>
+              <span class="donut-legend-label">Desktop</span>
+              <span class="donut-legend-val">28%</span>
+            </div>
+            <div class="donut-legend-item">
+              <div class="donut-legend-swatch" style="background:#3d5470;"></div>
+              <span class="donut-legend-label">Tablet</span>
+              <span class="donut-legend-val">20%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="admin-chart-row">
+      <div class="admin-chart-card">
+        <div class="admin-chart-card__title">Regional Distribution</div>
+        <div class="admin-chart-card__sub">Visitors by state — Northeast India</div>
+        <div class="geo-chart" id="geo-chart"></div>
+      </div>
+      <div class="admin-chart-card">
+        <div class="admin-chart-card__title">Live Activity Feed</div>
+        <div class="admin-chart-card__sub">Real-time page views</div>
+        <div class="live-feed" id="live-feed"></div>
+      </div>
+    </div>
+
+    <!-- Report Card -->
+    <div class="report-card">
+      <div class="report-card__icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div class="report-card__info">
+        <div class="report-card__title">Automated Monthly Report — March 2026</div>
+        <div class="report-card__desc">A one-page executive brief is compiled on the 1st of each month covering: total and unique visitor counts, session duration analysis, geographic access distribution across all eight NE states, top-visited pages, device breakdown, referral sources, and traffic anomaly flags. The report is automatically dispatched to the administrator's registered inbox.</div>
+        <div class="report-card__next">Next scheduled dispatch: April 01, 2026 at 08:00 IST &rarr; admin@nestcluster.gov.in</div>
+      </div>
+      <div class="report-card__actions">
+        <button class="admin-btn admin-btn--gold" onclick="generateReport()">Preview Report</button>
+        <button class="admin-btn admin-btn--ghost" onclick="mailReport()">Send Now</button>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /admin-shell -->
+
+
+<!-- ══════════════════════════════════════
+     PUBLIC WEBSITE
+══════════════════════════════════════ -->
+<div id="public-site">
+
+<!-- ── TOP UTILITY BAR ── -->
+<div class="topbar" role="navigation" aria-label="Utility navigation">
+  <div class="topbar__inner">
+    <div class="topbar__gov">
+      <span class="topbar__gov-text">Government of India</span>
+      <div class="topbar__gov-sep"></div>
+      <span class="topbar__gov-text">Ministry of Science &amp; Technology</span>
+      <div class="topbar__gov-sep"></div>
+      <span class="topbar__gov-text">Department of Science &amp; Technology</span>
+    </div>
+    <div class="topbar__links">
+      <a class="topbar__link" href="#" aria-label="Screen reader accessible version">Accessibility</a>
+      <a class="topbar__link" href="#" aria-label="Right to information">RTI</a>
+      <a class="topbar__link" href="#" aria-label="Sitemap">Sitemap</a>
+      <a class="topbar__link" href="#contact">Contact</a>
+    </div>
+    <div class="topbar__accessibility" aria-label="Text size controls">
+      <button class="topbar__a11y-btn" aria-label="Decrease text size" onclick="document.documentElement.style.fontSize='14px'">A−</button>
+      <button class="topbar__a11y-btn" aria-label="Normal text size" onclick="document.documentElement.style.fontSize='16px'">A</button>
+      <button class="topbar__a11y-btn" aria-label="Increase text size" onclick="document.documentElement.style.fontSize='18px'">A+</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TICKER ── -->
+<div class="ticker" role="marquee" aria-label="Latest announcements">
+  <div class="ticker__track" id="ticker-track"></div>
+</div>
+
+<!-- ── PRIMARY NAVBAR ── -->
+<header>
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Primary navigation">
+    <div class="navbar__inner">
+      <!-- Logo -->
+      <a href="#" class="navbar__logo" aria-label="NEST Cluster — Home">
+        <div class="navbar__logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 22 22"><path d="M11 1L20 6.5V15.5L11 21L2 15.5V6.5L11 1Z"/></svg>
+        </div>
+        <div class="navbar__logo-text">
+          <span class="navbar__logo-name">NEST Cluster</span>
+          <span class="navbar__logo-sub">North-Eastern Science &amp; Technology</span>
+        </div>
+      </a>
+
+      <div class="navbar__divider" aria-hidden="true"></div>
+
+      <!-- Links -->
+      <ul class="navbar__links" role="list">
+        <li>
+          <a href="#about" class="navbar__link">About</a>
+        </li>
+        <li class="navbar__link navbar__link--drop" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
+          Programmes
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="dropdown" role="menu">
+            <a class="dropdown__item" href="#programs" role="menuitem">Research Grant Programme<span>Funding for frontier research</span></a>
+            <a class="dropdown__item" href="#programs" role="menuitem">Startup Incubation Hub<span>Deep-tech venture support</span></a>
+            <a class="dropdown__item" href="#programs" role="menuitem">Rural Science Outreach<span>Grassroots STEM access</span></a>
+            <a class="dropdown__item" href="#programs" role="menuitem">Fellowship Exchange<span>Cross-institutional collaboration</span></a>
+            <a class="dropdown__item" href="#programs" role="menuitem">Technology Transfer Office<span>IP commercialisation support</span></a>
+            <a class="dropdown__item" href="#programs" role="menuitem">Science Policy Dialogue<span>Policy co-creation platform</span></a>
+          </div>
+        </li>
+        <li class="navbar__link navbar__link--drop" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
+          Region
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="dropdown" role="menu">
+            <a class="dropdown__item" href="#northeast" role="menuitem">About the Northeast<span>Eight sister states overview</span></a>
+            <a class="dropdown__item" href="#northeast" role="menuitem">Assam — Lead Node<span>Secretariat & IIT Guwahati hub</span></a>
+            <a class="dropdown__item" href="#northeast" role="menuitem">Arunachal Pradesh<span>Biodiversity & altitude research</span></a>
+            <a class="dropdown__item" href="#northeast" role="menuitem">Manipur, Nagaland & More<span>All eight state clusters</span></a>
+          </div>
+        </li>
+        <li>
+          <a href="#facilities" class="navbar__link">Facilities</a>
+        </li>
+        <li class="navbar__link navbar__link--drop" tabindex="0" role="button" aria-haspopup="true" aria-expanded="false">
+          News &amp; Events
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="dropdown" role="menu">
+            <a class="dropdown__item" href="#news" role="menuitem">Latest News<span>Announcements & updates</span></a>
+            <a class="dropdown__item" href="#news" role="menuitem">Events Calendar<span>Conferences, workshops, calls</span></a>
+            <a class="dropdown__item" href="#news" role="menuitem">Publications<span>Reports, journals, briefs</span></a>
+            <a class="dropdown__item" href="#news" role="menuitem">Media Gallery<span>Images and recordings</span></a>
+          </div>
+        </li>
+        <li>
+          <a href="#partners" class="navbar__link">Partners</a>
+        </li>
+        <li>
+          <a href="#contact" class="navbar__link">Contact</a>
+        </li>
+      </ul>
+
+      <!-- Actions -->
+      <div class="navbar__actions">
+        <button class="navbar__search-btn" data-search-open aria-label="Open search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="navbar__portal-btn" data-portal-open>Portal Access</button>
+        <button class="navbar__hamburger" id="navbar-hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ── PAGE NAVIGATION BAR ── -->
+<nav class="page-nav" id="page-nav" aria-label="Page section navigation">
+  <div class="page-nav__inner">
+    <div class="page-nav__sections">
+      <div class="page-nav__item active" data-section="hero">Overview</div>
+      <div class="page-nav__item" data-section="about">About</div>
+      <div class="page-nav__item" data-section="programs">Programmes</div>
+      <div class="page-nav__item" data-section="northeast">Region</div>
+      <div class="page-nav__item" data-section="facilities">Facilities</div>
+      <div class="page-nav__item" data-section="news">News</div>
+      <div class="page-nav__item" data-section="partners">Partners</div>
+      <div class="page-nav__item" data-section="contact">Contact</div>
+    </div>
+    <div class="page-nav__right">
+      <div class="page-nav__breadcrumb">
+        <a href="#">NEST</a>
+        <span class="page-nav__breadcrumb-sep">/</span>
+        <span id="breadcrumb-current">Home</span>
+      </div>
+      <div class="page-nav__progress" title="Page scroll progress" aria-hidden="true">
+        <div class="page-nav__progress-fill" id="page-nav-progress"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section id="hero" class="hero" aria-label="Introduction">
+  <div class="hero__grid-overlay" aria-hidden="true"></div>
+  <div class="hero__radial" aria-hidden="true"></div>
+  <div class="hero__emblem" aria-hidden="true">
+    <div class="hero__emblem-ring"></div>
+    <div class="hero__emblem-ring hero__emblem-ring--inner"></div>
+    <div class="hero__emblem-ring hero__emblem-ring--core"></div>
+  </div>
+
+  <div class="hero__content">
+    <div class="hero__gov-seal anim-fade-up" aria-label="Official designation">
+      <div class="hero__gov-seal-line"></div>
+      <div class="hero__gov-seal-text">
+        <strong>Government of India — Ministry of Science &amp; Technology</strong>
+        Established under the National Science and Technology Cluster Policy, 2022
+      </div>
+    </div>
+
+    <div class="hero__overline anim-fade-up anim-delay-1" aria-hidden="true">
+      <div class="hero__overline-rule"></div>
+      <span class="label label--light">Northeast India's Premier Science Infrastructure</span>
+    </div>
+
+    <h1 class="hero__h1 anim-fade-up anim-delay-2">
+      North-Eastern<br>
+      <em>Science &amp; Technology</em><br>
+      Cluster
+    </h1>
+
+    <p class="hero__lead anim-fade-up anim-delay-3">
+      Catalysing frontier research, inclusive innovation and technological enterprise across the eight states of Northeast India — from the Himalayan highlands to the Brahmaputra plains.
+    </p>
+
+    <div class="hero__actions anim-fade-up anim-delay-4">
+      <a href="#programs" class="btn btn--gold">Explore Programmes</a>
+      <a href="#about" class="btn btn--outline">About NEST</a>
+    </div>
+
+    <div class="hero__metrics anim-fade-up anim-delay-5">
+      <div class="hero__metric">
+        <div class="hero__metric-val">8</div>
+        <div class="hero__metric-label">States Covered</div>
+      </div>
+      <div class="hero__metric">
+        <div class="hero__metric-val">120+</div>
+        <div class="hero__metric-label">Institutions</div>
+      </div>
+      <div class="hero__metric">
+        <div class="hero__metric-val">340+</div>
+        <div class="hero__metric-label">Active Projects</div>
+      </div>
+      <div class="hero__metric">
+        <div class="hero__metric-val">&#8377;480Cr</div>
+        <div class="hero__metric-label">Funds Deployed</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__scroll-hint anim-fade-up" aria-hidden="true">
+    <span class="hero__scroll-hint-text">Scroll</span>
+    <div class="hero__scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     ABOUT
+══════════════════════════════════════ -->
+<section id="about" class="about-section section-pad" aria-label="About NEST">
+  <div class="container">
+    <div class="about-layout">
+
+      <div class="about-visual reveal">
+        <div class="about-diagram" id="about-diagram" style="height:380px;" aria-hidden="true">
+          <div class="about-diagram__grid"></div>
+        </div>
+        <div class="about-caption">
+          <p>"The Northeast has always been at the frontier — geographically, ecologically, culturally. NEST ensures it is also at the frontier of science." — NEST Founding Charter, 2022</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-header reveal">
+          <p class="label">About the Cluster</p>
+          <h2 class="section-title">A unified science infrastructure for India's <em>Northeast</em></h2>
+        </div>
+
+        <div class="about-body">
+          <p class="reveal reveal-delay-1">
+            The North-Eastern Science &amp; Technology (NEST) Cluster is a Government of India initiative established under the Ministry of Science &amp; Technology, in alignment with the National Science and Technology Cluster Policy of 2022. NEST constitutes the most comprehensive and systematically designed science governance architecture ever deployed in Northeast India.
+          </p>
+          <p class="reveal reveal-delay-2">
+            NEST operates through a federated model: a central Secretariat in Guwahati, Assam, anchors a network of state-level cluster nodes in each of the eight northeastern states. Each node is constituted by the state government, a designated academic anchor institution, and representation from industry and civil society. This structure ensures that national scientific priorities are translated into regionally relevant programmes, and that local knowledge and needs are surfaced upward into national policy.
+          </p>
+          <p class="reveal reveal-delay-3">
+            The Cluster draws its mandate from three strategic imperatives: first, to correct decades of underinvestment in scientific infrastructure across the region; second, to harness the Northeast's unique ecological, cultural and geographical endowments as assets for scientific inquiry; and third, to generate inclusive prosperity by connecting science and technology directly to the livelihoods of rural and tribal communities.
+          </p>
+        </div>
+
+        <div class="about-pillars reveal reveal-delay-1">
+          <div class="about-pillar">
+            <div class="about-pillar__number">01</div>
+            <div class="about-pillar__name">Research Excellence</div>
+            <div class="about-pillar__desc">Competitive and mission-mode funding for frontier research aligned with national S&amp;T priorities and regional development imperatives.</div>
+          </div>
+          <div class="about-pillar">
+            <div class="about-pillar__number">02</div>
+            <div class="about-pillar__name">Innovation &amp; Incubation</div>
+            <div class="about-pillar__desc">Structured acceleration for deep-tech startups from ideation to market-readiness, with seed capital, mentorship and infrastructure.</div>
+          </div>
+          <div class="about-pillar">
+            <div class="about-pillar__number">03</div>
+            <div class="about-pillar__name">Industry Partnerships</div>
+            <div class="about-pillar__desc">Bridging institutional research and enterprise through technology transfer, IP licensing and co-development partnerships.</div>
+          </div>
+          <div class="about-pillar">
+            <div class="about-pillar__number">04</div>
+            <div class="about-pillar__name">Inclusive Access</div>
+            <div class="about-pillar__desc">Vernacular science content, mobile outreach, offline-capable digital tools and community liaisons to reach every district and block.</div>
+          </div>
+        </div>
+
+        <div class="about-governance reveal reveal-delay-2">
+          <div class="about-governance__title">Governance Structure</div>
+          <p>NEST is governed by a multi-tier architecture: a National Governing Board chaired by the Secretary, DST; a Scientific Advisory Council comprising eminent researchers and technologists; eight State Cluster Management Committees; and an independent Academic Review Board. Day-to-day operations are managed by an Executive Director with a professional secretariat. All grant disbursements are subject to quarterly utilisation certification and annual independent audit.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PROGRAMMES
+══════════════════════════════════════ -->
+<section id="programs" class="programs-section section-pad" aria-label="Programmes and initiatives">
+  <div class="container">
+    <div class="section-header reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <p class="label">What We Do</p>
+        <h2 class="section-title">Programmes &amp; <em>Initiatives</em></h2>
+        <p>Six interconnected programme streams that span the full arc from basic research to public benefit.</p>
+      </div>
+      <a href="#contact" class="btn btn--primary btn--sm reveal">Apply or Enquire &rarr;</a>
+    </div>
+
+    <div class="programs-grid reveal">
+
+      <div class="program-card">
+        <div class="program-card__num" aria-hidden="true">01</div>
+        <div class="program-card__tag">Flagship — Research Funding</div>
+        <h3 class="program-card__title">Research Grant Programme</h3>
+        <p class="program-card__desc">The NEST Research Grant Programme is the Cluster's flagship funding mechanism for fundamental and applied research. Grants are awarded on a competitive basis across four priority domains: biotechnology and life sciences; clean and renewable energy; advanced materials and nanosciences; and artificial intelligence, quantum computing and data sciences. Project grants range from ₹25 lakhs to ₹3 crores over one to three years, with an expedited category for seed grants below ₹10 lakhs.</p>
+        <div class="program-card__details">
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Grant Range</span>
+            <span class="program-card__detail-val">&#8377;10L – &#8377;3Cr per project</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Eligibility</span>
+            <span class="program-card__detail-val">NEST-affiliated institutions; individual researchers with institutional sponsorship</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Cycle</span>
+            <span class="program-card__detail-val">Annual call; rolling seed grant window</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Next Deadline</span>
+            <span class="program-card__detail-val">June 30, 2026</span>
+          </div>
+        </div>
+        <span class="program-card__link">View Programme Details &rarr;</span>
+      </div>
+
+      <div class="program-card">
+        <div class="program-card__num" aria-hidden="true">02</div>
+        <div class="program-card__tag">Innovation — Entrepreneurship</div>
+        <h3 class="program-card__title">Startup Incubation Hub</h3>
+        <p class="program-card__desc">The NEST Startup Incubation Hub is a structured, 20-week cohort-based programme for technology-led startups with founders from Northeast India. The programme provides co-working infrastructure, mentorship from domain experts and industry leaders, seed grants of up to ₹50 lakhs, connections to angel investors and venture funds, and facilitated pilot partnerships with state governments and public enterprises. The Hub operates from the Guwahati node with satellite operations in Imphal and Shillong.</p>
+        <div class="program-card__details">
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Seed Grant</span>
+            <span class="program-card__detail-val">Up to &#8377;50L per startup</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Duration</span>
+            <span class="program-card__detail-val">20-week intensive cohort</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Cohort Size</span>
+            <span class="program-card__detail-val">15–20 startups per cohort</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Next Cohort</span>
+            <span class="program-card__detail-val">Cohort 4 — April 2026</span>
+          </div>
+        </div>
+        <span class="program-card__link">Apply for Incubation &rarr;</span>
+      </div>
+
+      <div class="program-card">
+        <div class="program-card__num" aria-hidden="true">03</div>
+        <div class="program-card__tag">Inclusion — Grassroots</div>
+        <h3 class="program-card__title">Rural Science Outreach</h3>
+        <p class="program-card__desc">The Rural Science Outreach Programme is NEST's commitment to ensuring that scientific literacy and access to technology are not privileges of the urban elite. The programme deploys mobile science laboratories — fully equipped vehicles staffed by trained science communicators — to rural blocks, including remote tribal areas. Content is developed in 14 regional languages including Assamese, Bodo, Meitei, Mizo, Khasi, Garo, Nagamese and Nepali. Digital content is designed for low-bandwidth and offline access.</p>
+        <div class="program-card__details">
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Coverage</span>
+            <span class="program-card__detail-val">180+ villages; 2,400+ rural touchpoints</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Languages</span>
+            <span class="program-card__detail-val">14 regional languages</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Liaisons</span>
+            <span class="program-card__detail-val">60 trained community liaisons deployed</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Target</span>
+            <span class="program-card__detail-val">500 villages by FY 2027</span>
+          </div>
+        </div>
+        <span class="program-card__link">Learn About Outreach &rarr;</span>
+      </div>
+
+      <div class="program-card">
+        <div class="program-card__num" aria-hidden="true">04</div>
+        <div class="program-card__tag">Capacity — Academic</div>
+        <h3 class="program-card__title">Fellowship &amp; Scholar Exchange</h3>
+        <p class="program-card__desc">The NEST Fellowship Programme enables researchers and students from Northeast institutions to undertake short-term attachments (2–6 weeks) and long-term fellowships (3–12 months) at premier national laboratories, IITs, IISc and CSIR centres. Reciprocal positions are offered to bring researchers from national institutions into NEST-affiliated centres. The programme also supports joint doctoral supervision between NEST partner institutions and national universities.</p>
+        <div class="program-card__details">
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Fellowship Types</span>
+            <span class="program-card__detail-val">Short-term, long-term, doctoral co-supervision</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Stipend</span>
+            <span class="program-card__detail-val">&#8377;30,000–&#8377;65,000 per month</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Annual Intake</span>
+            <span class="program-card__detail-val">120 fellows per cycle</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Partners</span>
+            <span class="program-card__detail-val">IITs, NIT, CSIR, IISER, DRDO</span>
+          </div>
+        </div>
+        <span class="program-card__link">Apply for Fellowship &rarr;</span>
+      </div>
+
+      <div class="program-card">
+        <div class="program-card__num" aria-hidden="true">05</div>
+        <div class="program-card__tag">Translation — Industry</div>
+        <h3 class="program-card__title">Technology Transfer Office</h3>
+        <p class="program-card__desc">The NEST Technology Transfer Office (TTO) provides end-to-end support for the commercialisation of research outputs generated within the Cluster. Services include patent landscape analysis, provisional and complete patent filing support, technology valuation, licensing agreement drafting, industry matchmaking, and facilitation of government procurement of indigenously developed technologies. The TTO is staffed by IP professionals and technology managers with sectoral expertise.</p>
+        <div class="program-card__details">
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Services</span>
+            <span class="program-card__detail-val">IP filing, licensing, industry matchmaking</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Patents Filed</span>
+            <span class="program-card__detail-val">47 patents since inception</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Technologies Transferred</span>
+            <span class="program-card__detail-val">18 commercial licensing agreements</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Turnaround</span>
+            <span class="program-card__detail-val">6–8 weeks for initial assessment</span>
+          </div>
+        </div>
+        <span class="program-card__link">Explore TTO Services &rarr;</span>
+      </div>
+
+      <div class="program-card">
+        <div class="program-card__num" aria-hidden="true">06</div>
+        <div class="program-card__tag">Dialogue — Policy</div>
+        <h3 class="program-card__title">Science Policy Dialogue</h3>
+        <p class="program-card__desc">The Annual NEST Science Policy Dialogue is a structured convening of researchers, policymakers, state government representatives, industry leaders and civil society organisations. The Dialogue is designed to surface evidence-based policy recommendations, co-create science and technology priorities specific to the Northeast, and review the performance of existing programmes against stated objectives. Outputs of the Dialogue are published as NEST Policy Briefs and submitted to the Ministry of Science &amp; Technology.</p>
+        <div class="program-card__details">
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Frequency</span>
+            <span class="program-card__detail-val">Annual flagship + quarterly consultations</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Next Dialogue</span>
+            <span class="program-card__detail-val">NEST Conclave 2026 — Shillong, July 14–16</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Last Edition</span>
+            <span class="program-card__detail-val">3,200 participants, 140 speakers</span>
+          </div>
+          <div class="program-card__detail">
+            <span class="program-card__detail-key">Outputs</span>
+            <span class="program-card__detail-val">Policy briefs, white papers, ministerial briefs</span>
+          </div>
+        </div>
+        <span class="program-card__link">View Policy Outputs &rarr;</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     NORTHEAST REGION
+══════════════════════════════════════ -->
+<section id="northeast" class="northeast-section section-pad" aria-label="Northeast India region">
+  <div class="container">
+    <div class="northeast-layout">
+
+      <div class="northeast-map reveal">
+        <div class="northeast-map__svg-wrap">
+          <svg viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of Northeast India showing eight NEST Cluster states">
+            <defs>
+              <filter id="state-glow">
+                <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <g filter="url(#state-glow)">
+              <path id="state-0" d="M80,140 L160,130 L200,145 L195,172 L158,182 L98,177 Z"
+                fill="rgba(36,59,86,0.85)" stroke="rgba(184,150,62,0.5)" stroke-width="1.5"
+                style="transition:fill 0.3s;cursor:pointer;"
+                onmouseover="this.style.fill='rgba(61,84,112,0.95)'"
+                onmouseout="this.style.fill='rgba(36,59,86,0.85)'"
+                aria-label="Assam"/>
+              <text x="138" y="160" font-family="IBM Plex Mono,monospace" font-size="6.5" fill="rgba(255,255,255,0.7)" text-anchor="middle" pointer-events="none">ASSAM</text>
+
+              <path id="state-1" d="M160,58 L282,52 L288,132 L200,145 L160,130 Z"
+                fill="rgba(27,46,69,0.85)" stroke="rgba(184,150,62,0.5)" stroke-width="1.5"
+                style="transition:fill 0.3s;cursor:pointer;"
+                onmouseover="this.style.fill='rgba(42,65,92,0.95)'"
+                onmouseout="this.style.fill='rgba(27,46,69,0.85)'"
+                aria-label="Arunachal Pradesh"/>
+              <text x="228" y="98" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(255,255,255,0.65)" text-anchor="middle" pointer-events="none">ARUNACHAL</text>
+              <text x="228" y="108" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(255,255,255,0.65)" text-anchor="middle" pointer-events="none">PRADESH</text>
+
+              <path id="state-2" d="M80,177 L158,182 L152,212 L82,208 Z"
+                fill="rgba(46,72,100,0.85)" stroke="rgba(184,150,62,0.5)" stroke-width="1.5"
+                style="transition:fill 0.3s;cursor:pointer;"
+                onmouseover="this.style.fill='rgba(61,90,122,0.95)'"
+                onmouseout="this.style.fill='rgba(46,72,100,0.85)'"
+                aria-label="Meghalaya"/>
+              <text x="118" y="200" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(255,255,255,0.65)" text-anchor="middle" pointer-events="none">MEGHALAYA</text>
+
+              <path id="state-3" d="M195,172 L252,168 L258,202 L196,207 Z"
+                fill="rgba(31,52,78,0.85)" stroke="rgba(184,150,62,0.5)" stroke-width="1.5"
+                style="transition:fill 0.3s;cursor:pointer;"
+                onmouseover="this.style.fill='rgba(46,70,100,0.95)'"
+                onmouseout="this.style.fill='rgba(31,52,78,0.85)'"
+                aria-label="Nagaland"/>
+              <text x="228" y="190" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(255,255,255,0.65)" text-anchor="middle" pointer-events="none">NAGALAND</text>
+
+              <path id="state-4" d="M196,207 L258,202 L262,248 L200,252 Z"
+                fill="rgba(36,59,88,0.85)" stroke="rgba(184,150,62,0.5)" stroke-width="1.5"
+                style="transition:fill 0.3s;cursor:pointer;"
+                onmouseover="this.style.fill='rgba(52,78,110,0.95)'"
+                onmouseout="this.style.fill='rgba(36,59,88,0.85)'"
+                aria-label="Manipur"/>
+              <text x="230" y="232" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(255,255,255,0.65)" text-anchor="middle" pointer-events="none">MANIPUR</text>
+
+              <path id="state-5" d="M168,248 L202,252 L198,288 L165,285 Z"
+                fill="rgba(27,46,72,0.85)" stroke="rgba(184,150,62,0.5)" stroke-width="1.5"
+                style="transition:fill 0.3s;cursor:pointer;"
+                onmouseover="this.style.fill='rgba(42,65,95,0.95)'"
+                onmouseout="this.style.fill='rgba(27,46,72,0.85)'"
+                aria-label="Mizoram"/>
+              <text x="185" y="272" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(255,255,255,0.65)" text-anchor="middle" pointer-events="none">MIZORAM</text>
+
+              <path id="state-6" d="M122,232 L166,238 L165,272 L125,268 Z"
+                fill="rgba(41,66,96,0.85)" stroke="rgba(184,150,62,0.5)" stroke-width="1.5"
+                style="transition:fill 0.3s;cursor:pointer;"
+                onmouseover="this.style.fill='rgba(58,86,120,0.95)'"
+                onmouseout="this.style.fill='rgba(41,66,96,0.85)'"
+                aria-label="Tripura"/>
+              <text x="145" y="256" font-family="IBM Plex Mono,monospace" font-size="6" fill="rgba(255,255,255,0.65)" text-anchor="middle" pointer-events="none">TRIPURA</text>
+
+              <path id="state-7" d="M48,92 L84,88 L87,122 L52,124 Z"
+                fill="rgba(184,150,62,0.15)" stroke="rgba(184,150,62,0.6)" stroke-width="1.5"
+                style="transition:fill 0.3s;cursor:pointer;"
+                onmouseover="this.style.fill='rgba(184,150,62,0.25)'"
+                onmouseout="this.style.fill='rgba(184,150,62,0.15)'"
+                aria-label="Sikkim"/>
+              <text x="68" y="110" font-family="IBM Plex Mono,monospace" font-size="5.5" fill="rgba(184,150,62,0.9)" text-anchor="middle" pointer-events="none">SIKKIM</text>
+
+              <!-- Node markers -->
+              <circle cx="140" cy="157" r="4.5" fill="rgba(184,150,62,0.8)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+              <circle cx="230" cy="92" r="3" fill="rgba(184,150,62,0.6)"/>
+              <circle cx="230" cy="188" r="3" fill="rgba(184,150,62,0.6)"/>
+              <circle cx="68" cy="106" r="2.5" fill="rgba(184,150,62,0.5)"/>
+              <!-- Cluster lines -->
+              <line x1="140" y1="157" x2="230" y2="92" stroke="rgba(184,150,62,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
+              <line x1="140" y1="157" x2="230" y2="188" stroke="rgba(184,150,62,0.15)" stroke-width="1" stroke-dasharray="3 3"/>
+            </g>
+          </svg>
+        </div>
+        <div class="northeast-map__legend">
+          <div class="map-legend-item"><svg class="map-legend-item__dot" viewBox="0 0 8 8"><rect width="8" height="8" fill="#243b56"/></svg>Assam</div>
+          <div class="map-legend-item"><svg class="map-legend-item__dot" viewBox="0 0 8 8"><rect width="8" height="8" fill="#1b2e45"/></svg>Arunachal Pradesh</div>
+          <div class="map-legend-item"><svg class="map-legend-item__dot" viewBox="0 0 8 8"><rect width="8" height="8" fill="#2e4864"/></svg>Meghalaya</div>
+          <div class="map-legend-item"><svg class="map-legend-item__dot" viewBox="0 0 8 8"><rect width="8" height="8" fill="#1f344e"/></svg>Nagaland</div>
+          <div class="map-legend-item"><svg class="map-legend-item__dot" viewBox="0 0 8 8"><rect width="8" height="8" fill="#243b58"/></svg>Manipur</div>
+          <div class="map-legend-item"><svg class="map-legend-item__dot" viewBox="0 0 8 8"><rect width="8" height="8" fill="#1b2e48"/></svg>Mizoram</div>
+          <div class="map-legend-item"><svg class="map-legend-item__dot" viewBox="0 0 8 8"><rect width="8" height="8" fill="#294260"/></svg>Tripura</div>
+          <div class="map-legend-item"><svg class="map-legend-item__dot" viewBox="0 0 8 8"><rect width="8" height="8" fill="rgba(184,150,62,0.5)"/></svg>Sikkim</div>
+        </div>
+      </div>
+
+      <div class="northeast-info">
+        <div class="section-header reveal">
+          <p class="label">Our Region</p>
+          <h2 class="section-title" style="color:var(--ivory);">Science that reaches every valley, every <em style="color:var(--gold-light);">village</em></h2>
+          <p>NEST serves a region of extraordinary diversity — eight states, 200,000 sq km, over 200 distinct tribal groups, 46 million people.</p>
+        </div>
+
+        <div class="northeast-body reveal reveal-delay-1">
+          <p>Northeast India is simultaneously one of the world's most significant biodiversity hotspots, one of South Asia's most linguistically diverse regions, and one of the most geopolitically consequential border areas in the subcontinent. It is also one of the most historically underserved in terms of scientific infrastructure and investment.</p>
+          <p>NEST's architecture accounts for this dual character. The Cluster actively harnesses the Northeast's unique scientific endowments — its high-altitude ecosystems, endemic flora and fauna, traditional ecological knowledge, geothermal potential and seismological significance — as the foundation for a distinctive regional science identity, rather than simply importing frameworks developed for other Indian contexts.</p>
+        </div>
+
+        <div class="northeast-metrics reveal reveal-delay-2">
+          <div class="northeast-metric">
+            <div class="northeast-metric__val">8</div>
+            <div class="northeast-metric__label">State Cluster Nodes</div>
+          </div>
+          <div class="northeast-metric">
+            <div class="northeast-metric__val">2,400+</div>
+            <div class="northeast-metric__label">Rural Touchpoints</div>
+          </div>
+          <div class="northeast-metric">
+            <div class="northeast-metric__val">14</div>
+            <div class="northeast-metric__label">Languages Served</div>
+          </div>
+          <div class="northeast-metric">
+            <div class="northeast-metric__val">62%</div>
+            <div class="northeast-metric__label">Rural Access Share</div>
+          </div>
+        </div>
+
+        <div class="northeast-access reveal reveal-delay-3">
+          <div class="northeast-access__title">Accessibility Commitment</div>
+          <p>All NEST digital resources are available in both low-bandwidth (2G-compatible) and offline versions. Portal interfaces are provided in eight scheduled languages of the Northeast. Physical science outreach extends to Aspirational Districts as a priority. Toll-free helpline services operate in all 14 regional languages served by the Cluster.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FACILITIES
+══════════════════════════════════════ -->
+<section id="facilities" class="facilities-section section-pad" aria-label="Research facilities">
+  <div class="container">
+    <div class="section-header reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <p class="label">Infrastructure</p>
+        <h2 class="section-title">World-class facilities, <em>within reach</em></h2>
+        <p>Eight specialised research infrastructure nodes, distributed across the NEST network and accessible to all affiliated institutions.</p>
+      </div>
+    </div>
+
+    <div class="facilities-grid">
+
+      <div class="facility-card reveal">
+        <span class="facility-card__number">FAC-01</span>
+        <div class="facility-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+        </div>
+        <h3 class="facility-card__title">Genomics &amp; Life Sciences Laboratory</h3>
+        <p class="facility-card__desc">High-throughput next-generation sequencing platforms, mass spectrometry-based proteomics, single-cell analysis, biosafety level 2 and 3 containment. Hosted at the IIT Guwahati collaborative node.</p>
+        <div class="facility-card__availability">
+          <div class="facility-card__status-dot"></div>
+          Operational — Access by application
+        </div>
+      </div>
+
+      <div class="facility-card reveal reveal-delay-1">
+        <span class="facility-card__number">FAC-02</span>
+        <div class="facility-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3 class="facility-card__title">Clean Energy Research Testbed</h3>
+        <p class="facility-card__desc">Grid-scale solar simulation, pico- and micro-hydro test rigs, biomass gasification, green hydrogen generation and storage. Designed for high-altitude, high-rainfall and remote-grid conditions unique to Northeast topography.</p>
+        <div class="facility-card__availability">
+          <div class="facility-card__status-dot"></div>
+          Operational — Sikkim &amp; Assam nodes
+        </div>
+      </div>
+
+      <div class="facility-card reveal reveal-delay-2">
+        <span class="facility-card__number">FAC-03</span>
+        <div class="facility-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3 class="facility-card__title">High-Performance Computing Cluster</h3>
+        <p class="facility-card__desc">Petaflop-class parallel computing for climate and hydrological modelling, AI and machine learning workloads, computational chemistry and drug discovery. Connected to the National Supercomputing Mission grid.</p>
+        <div class="facility-card__availability">
+          <div class="facility-card__status-dot"></div>
+          Operational — Remote access available
+        </div>
+      </div>
+
+      <div class="facility-card reveal reveal-delay-3">
+        <span class="facility-card__number">FAC-04</span>
+        <div class="facility-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="facility-card__title">Biodiversity &amp; Ecology Centre</h3>
+        <p class="facility-card__desc">Regional herbarium with 80,000+ specimens, zoological collection, molecular systematics laboratory, field stations in four biodiversity-rich zones, and an indigenous knowledge documentation archive covering traditional ecological and medicinal practices.</p>
+        <div class="facility-card__availability">
+          <div class="facility-card__status-dot"></div>
+          Operational — Arunachal field station open
+        </div>
+      </div>
+
+      <div class="facility-card reveal">
+        <span class="facility-card__number">FAC-05</span>
+        <div class="facility-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <h3 class="facility-card__title">Fabrication &amp; Prototyping Hub</h3>
+        <p class="facility-card__desc">CNC machining, multi-material 3D printing, electronics design and testing, embedded systems workspace, PCB fabrication and an industrial IoT development environment. Open to NEST-affiliated startups and researchers.</p>
+        <div class="facility-card__availability">
+          <div class="facility-card__status-dot"></div>
+          Operational — Imphal &amp; Guwahati nodes
+        </div>
+      </div>
+
+      <div class="facility-card reveal reveal-delay-1">
+        <span class="facility-card__number">FAC-06</span>
+        <div class="facility-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3 class="facility-card__title">Remote Sensing &amp; GIS Station</h3>
+        <p class="facility-card__desc">X-band and L-band SAR data receiving and processing infrastructure, multi-spectral optical imagery analysis, terrain and land-cover mapping, disaster early warning integration, and a regional environmental monitoring platform.</p>
+        <div class="facility-card__availability">
+          <div class="facility-card__status-dot"></div>
+          Operational — DST-NRSC collaboration
+        </div>
+      </div>
+
+      <div class="facility-card reveal reveal-delay-2">
+        <span class="facility-card__number">FAC-07</span>
+        <div class="facility-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="6" r="3"/><path d="M11 9v11M3 20l8-5 8 5"/></svg>
+        </div>
+        <h3 class="facility-card__title">Seismology &amp; Earth Sciences Observatory</h3>
+        <p class="facility-card__desc">Broadband seismograph network across Zones IV and V, GPS-based crustal deformation monitoring, geothermal gradient measurement stations and a regional earthquake early warning pilot node — critical given the Northeast's position on one of Asia's most seismically active fault systems.</p>
+        <div class="facility-card__availability">
+          <div class="facility-card__status-dot"></div>
+          Operational — NGRI collaborative node
+        </div>
+      </div>
+
+      <div class="facility-card reveal reveal-delay-3">
+        <span class="facility-card__number">FAC-08</span>
+        <div class="facility-card__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <h3 class="facility-card__title">Digital Knowledge Commons</h3>
+        <p class="facility-card__desc">Open-access digital repository of NEST-funded research outputs, a multilingual science library with 1.4 million curated resources, offline-capable vernacular content portals for rural access, and a traditional knowledge digital library module developed in partnership with tribal knowledge holders.</p>
+        <div class="facility-card__availability">
+          <div class="facility-card__status-dot"></div>
+          Live — nestcluster.gov.in/knowledge
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     NEWS & EVENTS
+══════════════════════════════════════ -->
+<section id="news" class="news-section section-pad" aria-label="News and events">
+  <div class="container">
+    <div class="section-header reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <p class="label">Latest</p>
+        <h2 class="section-title">News &amp; <em>Events</em></h2>
+      </div>
+      <a href="#" class="btn btn--outline-dark btn--sm reveal">View All Announcements &rarr;</a>
+    </div>
+
+    <div class="news-layout reveal">
+      <div class="news-featured">
+        <div class="news-featured__bg-pattern" aria-hidden="true"></div>
+        <div class="news-featured__content">
+          <span class="news-featured__category">MoU Signed</span>
+          <div class="news-featured__date">March 05, 2026</div>
+          <h3 class="news-featured__title">NEST Cluster signs landmark MoU with IIT Guwahati and IIIT Manipur for joint doctoral programmes in quantum computing and computational sciences</h3>
+          <p class="news-featured__excerpt">The agreement, signed in the presence of the Secretary, Department of Science &amp; Technology, enables cross-institutional PhD programmes with shared laboratory access and co-supervised research across three NEST-affiliated centres. The initiative is expected to produce 40 doctoral researchers annually across the two participating institutions, addressing a critical gap in advanced research capacity in the Northeast.</p>
+          <a href="#" class="news-featured__link">Read Full Announcement &rarr;</a>
+        </div>
+      </div>
+
+      <div class="news-sidebar">
+        <div class="news-item">
+          <div class="news-item__meta">
+            <span class="news-item__cat">Outreach</span>
+            <span class="news-item__date">Feb 20, 2026</span>
+          </div>
+          <div class="news-item__title">Second cohort of NEST Rural Science Liaisons deployed across 180 villages in Meghalaya, Mizoram and Nagaland</div>
+        </div>
+        <div class="news-item">
+          <div class="news-item__meta">
+            <span class="news-item__cat">Funding</span>
+            <span class="news-item__date">Feb 08, 2026</span>
+          </div>
+          <div class="news-item__title">NEST Startup Hub announces ₹12 crore seed fund for Deep-Tech Cohort 3 — agri-tech, clean energy, health diagnostics and environmental monitoring</div>
+        </div>
+        <div class="news-item">
+          <div class="news-item__meta">
+            <span class="news-item__cat">Event</span>
+            <span class="news-item__date">Jan 30, 2026</span>
+          </div>
+          <div class="news-item__title">NEST Annual Science Conclave 2026 concludes in Guwahati with 3,200 participants, 140 speakers and 26 startup demos</div>
+        </div>
+        <div class="news-item">
+          <div class="news-item__meta">
+            <span class="news-item__cat">Research</span>
+            <span class="news-item__date">Jan 14, 2026</span>
+          </div>
+          <div class="news-item__title">Clean Energy Testbed in Sikkim achieves first successful green hydrogen storage milestone at high altitude — a first for the Himalayan region</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="news-more-grid reveal">
+      <div class="news-card-sm">
+        <div class="news-card-sm__meta">
+          <span class="news-item__cat">Policy</span>
+          <span class="news-item__date">Jan 05, 2026</span>
+        </div>
+        <h3 class="news-card-sm__title">NEST submits Northeast Science Policy Brief 2026 to Ministry of Science &amp; Technology</h3>
+        <p class="news-card-sm__excerpt">The annual brief covers 14 priority recommendations across research infrastructure, talent development, industry linkage and rural outreach for FY 2026–27.</p>
+      </div>
+      <div class="news-card-sm">
+        <div class="news-card-sm__meta">
+          <span class="news-item__cat">Fellowship</span>
+          <span class="news-item__date">Dec 18, 2025</span>
+        </div>
+        <h3 class="news-card-sm__title">115 NEST Fellows complete 2025 cohort at national laboratories including TIFR, NCBS and CSIR-NEIST</h3>
+        <p class="news-card-sm__excerpt">The programme's highest-ever completion cohort, with 34 fellows transitioning directly to doctoral enrolment and 8 initiating startup ventures.</p>
+      </div>
+      <div class="news-card-sm">
+        <div class="news-card-sm__meta">
+          <span class="news-item__cat">Technology</span>
+          <span class="news-item__date">Dec 02, 2025</span>
+        </div>
+        <h3 class="news-card-sm__title">NEST Digital Knowledge Commons portal crosses 5 lakh registered users; Assamese-language interface launched</h3>
+        <p class="news-card-sm__excerpt">The milestone reflects growing rural and semi-urban uptake, with 62% of users accessing the platform via mobile devices on sub-4G connections.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PARTNERS
+══════════════════════════════════════ -->
+<section id="partners" class="partners-section section-pad" aria-label="Partners and collaborators">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="label">Ecosystem</p>
+      <h2 class="section-title">Partners &amp; <em>Collaborators</em></h2>
+      <p>A network of 120+ academic, governmental and industry partners constituting the NEST Cluster ecosystem.</p>
+    </div>
+
+    <div class="partners-grid reveal">
+      <div class="partner-cell">
+        <div class="partner-cell__type">Academic Anchor</div>
+        <div class="partner-cell__name">IIT Guwahati</div>
+        <div class="partner-cell__desc">Lead institution for the Assam node; Genomics Lab and HPC Cluster host; joint doctoral programme partner.</div>
+      </div>
+      <div class="partner-cell">
+        <div class="partner-cell__type">Academic Partner</div>
+        <div class="partner-cell__name">NIT Silchar</div>
+        <div class="partner-cell__desc">Engineering and materials science research node; co-anchors the Clean Energy Testbed with NESAC.</div>
+      </div>
+      <div class="partner-cell">
+        <div class="partner-cell__type">Research Institute</div>
+        <div class="partner-cell__name">CSIR — NEIST</div>
+        <div class="partner-cell__desc">North East Institute of Science and Technology; natural products, biodiversity and environmental chemistry focus areas.</div>
+      </div>
+      <div class="partner-cell">
+        <div class="partner-cell__type">National Agency</div>
+        <div class="partner-cell__name">Dept. of Biotechnology</div>
+        <div class="partner-cell__desc">Joint funding of NEST Genomics Lab; co-sponsor of the Northeast Bioeconomy Initiative under DBT-NER.</div>
+      </div>
+      <div class="partner-cell">
+        <div class="partner-cell__type">National Agency</div>
+        <div class="partner-cell__name">ATAL Innovation Mission</div>
+        <div class="partner-cell__desc">Co-funder of NEST Startup Hub; provides AIM network connectivity for startup mentorship and investor access.</div>
+      </div>
+      <div class="partner-cell">
+        <div class="partner-cell__type">Academic Partner</div>
+        <div class="partner-cell__name">IIIT Manipur</div>
+        <div class="partner-cell__desc">AI, quantum computing and data sciences focus; joint doctoral programme co-signatory for the 2026 MoU.</div>
+      </div>
+      <div class="partner-cell">
+        <div class="partner-cell__type">National Agency</div>
+        <div class="partner-cell__name">NITI Aayog</div>
+        <div class="partner-cell__desc">Policy coordination support; Aspirational Districts programme integration for rural S&amp;T access.</div>
+      </div>
+      <div class="partner-cell">
+        <div class="partner-cell__type">National Agency</div>
+        <div class="partner-cell__name">MeitY</div>
+        <div class="partner-cell__desc">Digital infrastructure support; co-developer of the NEST Knowledge Commons offline portal stack.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     CONTACT
+══════════════════════════════════════ -->
+<section id="contact" class="contact-section section-pad" aria-label="Contact and enquiries">
+  <div class="container">
+    <div class="contact-layout">
+
+      <div>
+        <div class="section-header">
+          <p class="label" style="color:var(--gold-light);">Reach Us</p>
+          <h2 class="section-title">Connect with <em>NEST</em></h2>
+        </div>
+        <div class="contact-details reveal">
+          <div class="contact-detail">
+            <div class="contact-detail__key">Secretariat Address</div>
+            <div class="contact-detail__val">NEST Cluster Secretariat<br>Science &amp; Technology Complex, Block C<br>VIP Road, Guwahati<br>Assam — 781 039, India</div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail__key">Electronic Mail</div>
+            <div class="contact-detail__val">
+              <a href="mailto:info@nestcluster.gov.in">info@nestcluster.gov.in</a><br>
+              <a href="mailto:grants@nestcluster.gov.in">grants@nestcluster.gov.in</a><br>
+              <a href="mailto:incubation@nestcluster.gov.in">incubation@nestcluster.gov.in</a>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail__key">Telephone</div>
+            <div class="contact-detail__val">+91 361 XXX XXXX (Secretariat)<br>1800-XXX-NEST (Toll-free Helpline)<br>Monday – Friday, 09:00 – 17:30 IST</div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail__key">State Cluster Offices</div>
+            <div class="contact-detail__val">
+              Imphal, Manipur<br>
+              Shillong, Meghalaya<br>
+              Kohima, Nagaland<br>
+              Aizawl, Mizoram<br>
+              Itanagar, Arunachal Pradesh<br>
+              Agartala, Tripura &nbsp;·&nbsp; Gangtok, Sikkim
+            </div>
+          </div>
+        </div>
+        <div class="accessibility-note reveal reveal-delay-1">
+          <div class="accessibility-note__title">Language &amp; Accessibility</div>
+          <p>Enquiries are accepted and responded to in English, Hindi, Assamese, Bodo, Meitei, Mizo, Khasi, Nagamese and Bengali. This website is screen-reader accessible and compliant with the Guidelines for Indian Government Websites (GIGW). For physical accessibility support at NEST offices, contact the State Cluster Office directly.</p>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="contact-form-wrap">
+          <div style="margin-bottom:var(--space-6);padding-bottom:var(--space-5);border-bottom:1px solid rgba(255,255,255,0.07);">
+            <p class="label" style="color:var(--gold-light);margin-bottom:var(--space-2);">Send an Enquiry</p>
+            <p style="font-size:var(--fs-sm);color:rgba(255,255,255,0.45);line-height:1.6;">The NEST Secretariat acknowledges all enquiries within one working day and provides substantive responses within five working days.</p>
+          </div>
+          <form id="contact-form" novalidate>
+            <div class="contact-form-grid">
+              <div class="field">
+                <label for="cf-name">Full Name *</label>
+                <input id="cf-name" type="text" placeholder="Your full name" required>
+              </div>
+              <div class="field">
+                <label for="cf-org">Organisation</label>
+                <input id="cf-org" type="text" placeholder="Institution / Company / Department">
+              </div>
+              <div class="field">
+                <label for="cf-email">Email Address *</label>
+                <input id="cf-email" type="email" placeholder="official@example.gov.in" required>
+              </div>
+              <div class="field">
+                <label for="cf-phone">Phone Number</label>
+                <input id="cf-phone" type="tel" placeholder="+91 XXXXX XXXXX">
+              </div>
+            </div>
+            <div class="field" style="margin-bottom:var(--space-4);">
+              <label for="cf-state">State</label>
+              <select id="cf-state">
+                <option value="" disabled selected>Select your state</option>
+                <option>Assam</option>
+                <option>Arunachal Pradesh</option>
+                <option>Manipur</option>
+                <option>Meghalaya</option>
+                <option>Mizoram</option>
+                <option>Nagaland</option>
+                <option>Tripura</option>
+                <option>Sikkim</option>
+                <option>Other (outside Northeast)</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom:var(--space-4);">
+              <label for="cf-subject">Nature of Enquiry *</label>
+              <select id="cf-subject" required>
+                <option value="" disabled selected>Select category</option>
+                <option>Research Grant Application</option>
+                <option>Startup Incubation Programme</option>
+                <option>Fellowship or Scholar Exchange</option>
+                <option>Technology Transfer</option>
+                <option>Rural Science Outreach</option>
+                <option>Partnership or MoU</option>
+                <option>Media and Press</option>
+                <option>RTI / Public Information</option>
+                <option>General Enquiry</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom:var(--space-6);">
+              <label for="cf-message">Message *</label>
+              <textarea id="cf-message" placeholder="Please describe your enquiry or proposal in detail. The more context you provide, the more precisely we can direct your enquiry to the right team." required></textarea>
+            </div>
+            <button type="submit" class="btn btn--gold">Submit Enquiry</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand__logo">
+          <div class="footer-brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 22 22"><path d="M11 1L20 6.5V15.5L11 21L2 15.5V6.5L11 1Z"/></svg>
+          </div>
+          <div>
+            <span class="footer-brand__name">NEST Cluster</span>
+            <span class="footer-brand__sub">North-Eastern S&amp;T</span>
+          </div>
+        </div>
+        <p>A Government of India initiative under the Ministry of Science &amp; Technology, catalysing scientific excellence, innovation and inclusive development across Northeast India's eight states.</p>
+        <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.56rem;letter-spacing:0.1em;color:rgba(255,255,255,0.3);padding:3px 8px;border:1px solid rgba(255,255,255,0.08);">Govt. of India</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.56rem;letter-spacing:0.1em;color:rgba(255,255,255,0.3);padding:3px 8px;border:1px solid rgba(255,255,255,0.08);">DST</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.56rem;letter-spacing:0.1em;color:rgba(255,255,255,0.3);padding:3px 8px;border:1px solid rgba(255,255,255,0.08);">Est. 2022</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Explore</div>
+        <ul class="footer-links">
+          <li><a href="#about">About NEST</a></li>
+          <li><a href="#programs">Research Grants</a></li>
+          <li><a href="#programs">Startup Incubation</a></li>
+          <li><a href="#programs">Rural Outreach</a></li>
+          <li><a href="#programs">Fellowships</a></li>
+          <li><a href="#programs">Technology Transfer</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Portals</div>
+        <ul class="footer-links">
+          <li><a href="#" data-portal-open>Researcher Portal</a></li>
+          <li><a href="#" data-portal-open>Startup Hub Portal</a></li>
+          <li><a href="#" data-portal-open>Grant Management System</a></li>
+          <li><a href="#" data-admin-enter>Admin Dashboard</a></li>
+          <li><a href="#">Knowledge Commons</a></li>
+          <li><a href="#">RTI / Public Access</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Information</div>
+        <ul class="footer-links">
+          <li><a href="#">Annual Reports</a></li>
+          <li><a href="#">Tender &amp; Procurement</a></li>
+          <li><a href="#">Careers at NEST</a></li>
+          <li><a href="#">Media &amp; Press</a></li>
+          <li><a href="#">Grievance Redressal</a></li>
+          <li><a href="#">Whistleblower Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Stay Informed</div>
+        <div class="footer-newsletter">
+          <label for="newsletter-email" class="sr-only">Email address for newsletter</label>
+          <input id="newsletter-email" type="email" placeholder="Your email address">
+          <button class="btn btn--gold btn--sm" style="width:100%;" onclick="showToast('Subscribed','You will receive NEST updates and announcements at the email provided.')">Subscribe to Updates</button>
+          <p>Receive grant announcements, event invitations and policy publications. Unsubscribe at any time. Your data is handled in accordance with the Government of India's Data Privacy Policy.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom__copy">
+      &copy; 2026 NEST Cluster — Government of India. Content on this website is published under the National Data Sharing and Accessibility Policy (NDSAP).
+    </div>
+    <div class="footer-bottom__links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Accessibility Statement</a>
+      <a href="#">Disclaimer</a>
+    </div>
+    <a class="footer-genorrow" href="#" aria-label="Powered and secured by GENORROW">
+      <span class="footer-genorrow__text">Powered &amp; Secured by</span>
+      <div class="footer-genorrow__badge">
+        <svg class="footer-genorrow__badge-icon" viewBox="0 0 14 16" aria-hidden="true">
+          <path d="M7 0L0 3v5c0 4.4 3 8.5 7 9.6C11 16.5 14 12.4 14 8V3L7 0zm0 4a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm3 8H4c0-2 1.3-3 3-3s3 1 3 3z"/>
+        </svg>
+        <span class="footer-genorrow__badge-name">GENORROW</span>
+      </div>
+    </a>
+  </div>
+</footer>
+
+</div><!-- /public-site -->
+
+<!-- ══════════════════════════════════════
+     SEARCH OVERLAY
+══════════════════════════════════════ -->
+<div class="search-overlay" id="search-overlay" role="dialog" aria-modal="true" aria-label="Site search">
+  <div class="search-panel">
+    <div class="search-panel__inner">
+      <div class="search-panel__label">Search NEST Cluster</div>
+      <div class="search-panel__input-wrap">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input
+          class="search-panel__input"
+          id="search-input"
+          type="search"
+          placeholder="Search programmes, facilities, news…"
+          autocomplete="off"
+          aria-label="Search query"
+        >
+        <button class="search-panel__close" id="search-close" aria-label="Close search">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="search-panel__quick" aria-label="Quick search suggestions">
+        <span class="search-panel__quick-label">Try:</span>
+        <button class="search-panel__quick-tag">Research Grants</button>
+        <button class="search-panel__quick-tag">Startup Incubation</button>
+        <button class="search-panel__quick-tag">Fellowships</button>
+        <button class="search-panel__quick-tag">HPC Computing</button>
+        <button class="search-panel__quick-tag">Rural Outreach</button>
+        <button class="search-panel__quick-tag">Manipur</button>
+      </div>
+      <div class="search-panel__results" id="search-results" aria-live="polite" aria-label="Search results"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PORTAL MODAL
+══════════════════════════════════════ -->
+<div class="modal-backdrop" id="portal-modal" role="dialog" aria-modal="true" aria-label="Portal access">
+  <div class="modal">
+    <div class="modal__head">
+      <div>
+        <h2 class="modal__title">Portal Access</h2>
+        <div class="modal__sub">Secure internal systems — login required</div>
+      </div>
+      <button class="modal__close" data-portal-close aria-label="Close portal modal">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="modal__tabs" role="tablist">
+        <button class="modal__tab active" role="tab" data-tab="researcher" aria-selected="true">Researcher</button>
+        <button class="modal__tab" role="tab" data-tab="startup" aria-selected="false">Startup</button>
+        <button class="modal__tab" role="tab" data-tab="admin" aria-selected="false">Admin</button>
+      </div>
+
+      <div class="modal-tab-panel" data-panel="researcher">
+        <div class="portal-entry" onclick="showToast('Portal Access','Redirecting to Researcher Portal — secure login required.')">
+          <div class="portal-entry__icon">
+            <svg viewBox="0 0 24 24"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+          </div>
+          <div class="portal-entry__info">
+            <div class="portal-entry__name">Research Grant Management System</div>
+            <div class="portal-entry__desc">Submit proposals, track milestones, upload utilisation reports</div>
+          </div>
+          <div class="portal-entry__arrow">&rarr;</div>
+        </div>
+        <div class="portal-entry" onclick="showToast('Portal Access','Redirecting to Publication Repository — secure login required.')">
+          <div class="portal-entry__icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div class="portal-entry__info">
+            <div class="portal-entry__name">NEST Publication Repository</div>
+            <div class="portal-entry__desc">Upload and access NEST-funded research outputs and datasets</div>
+          </div>
+          <div class="portal-entry__arrow">&rarr;</div>
+        </div>
+        <div class="portal-entry" onclick="showToast('Portal Access','Redirecting to Collaboration Board — secure login required.')">
+          <div class="portal-entry__icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="portal-entry__info">
+            <div class="portal-entry__name">Collaboration &amp; Partnership Board</div>
+            <div class="portal-entry__desc">Find research partners and co-applicants across NEST institutions</div>
+          </div>
+          <div class="portal-entry__arrow">&rarr;</div>
+        </div>
+      </div>
+
+      <div class="modal-tab-panel" data-panel="startup" style="display:none;">
+        <div class="portal-entry" onclick="showToast('Portal Access','Redirecting to Startup Dashboard — secure login required.')">
+          <div class="portal-entry__icon">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="portal-entry__info">
+            <div class="portal-entry__name">Startup Dashboard</div>
+            <div class="portal-entry__desc">Milestones, disbursement status, mentor schedule and resources</div>
+          </div>
+          <div class="portal-entry__arrow">&rarr;</div>
+        </div>
+        <div class="portal-entry" onclick="showToast('Applications Open','Cohort 4 applications are open until March 31, 2026.')">
+          <div class="portal-entry__icon">
+            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <div class="portal-entry__info">
+            <div class="portal-entry__name">Apply for Incubation — Cohort 4</div>
+            <div class="portal-entry__desc">Applications open &mdash; deadline March 31, 2026</div>
+          </div>
+          <div class="portal-entry__arrow">&rarr;</div>
+        </div>
+      </div>
+
+      <div class="modal-tab-panel" data-panel="admin" style="display:none;">
+        <div class="portal-entry" onclick="enterAdmin(); document.getElementById('portal-modal').classList.remove('open');">
+          <div class="portal-entry__icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </div>
+          <div class="portal-entry__info">
+            <div class="portal-entry__name">Admin Analytics Dashboard</div>
+            <div class="portal-entry__desc">Traffic analytics, geographic data, monthly auto-reports</div>
+          </div>
+          <div class="portal-entry__arrow">&rarr;</div>
+        </div>
+        <div class="portal-entry" onclick="showToast('Portal Access','Redirecting to Content Management System.')">
+          <div class="portal-entry__icon">
+            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <div class="portal-entry__info">
+            <div class="portal-entry__name">Content Management System</div>
+            <div class="portal-entry__desc">Manage news, programme listings and site content</div>
+          </div>
+          <div class="portal-entry__arrow">&rarr;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Nav Overlay -->
+<div id="mobile-nav-overlay" style="display:none;position:fixed;inset:0;background:rgba(13,27,42,0.6);z-index:140;backdrop-filter:blur(4px);"></div>
+
+<!-- ── MOBILE NAV ── -->
+<nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+  <div class="mobile-nav__head">
+    <div class="navbar__logo">
+      <div class="navbar__logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 22 22"><path d="M11 1L20 6.5V15.5L11 21L2 15.5V6.5L11 1Z"/></svg>
+      </div>
+      <div class="navbar__logo-text">
+        <span class="navbar__logo-name" style="font-size:0.95rem;">NEST Cluster</span>
+      </div>
+    </div>
+    <button class="mobile-nav__close" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-nav__links">
+    <div class="mobile-nav__link" onclick="document.getElementById('mobile-nav').classList.remove('open');document.getElementById('mobile-nav-overlay').style.display='none';document.body.style.overflow='';document.getElementById('about').scrollIntoView({behavior:'smooth'})">About</div>
+    <div class="mobile-nav__link" onclick="document.getElementById('mobile-nav').classList.remove('open');document.getElementById('mobile-nav-overlay').style.display='none';document.body.style.overflow='';document.getElementById('programs').scrollIntoView({behavior:'smooth'})">Programmes</div>
+    <div class="mobile-nav__link" onclick="document.getElementById('mobile-nav').classList.remove('open');document.getElementById('mobile-nav-overlay').style.display='none';document.body.style.overflow='';document.getElementById('northeast').scrollIntoView({behavior:'smooth'})">Region</div>
+    <div class="mobile-nav__link" onclick="document.getElementById('mobile-nav').classList.remove('open');document.getElementById('mobile-nav-overlay').style.display='none';document.body.style.overflow='';document.getElementById('facilities').scrollIntoView({behavior:'smooth'})">Facilities</div>
+    <div class="mobile-nav__link" onclick="document.getElementById('mobile-nav').classList.remove('open');document.getElementById('mobile-nav-overlay').style.display='none';document.body.style.overflow='';document.getElementById('news').scrollIntoView({behavior:'smooth'})">News &amp; Events</div>
+    <div class="mobile-nav__link" onclick="document.getElementById('mobile-nav').classList.remove('open');document.getElementById('mobile-nav-overlay').style.display='none';document.body.style.overflow='';document.getElementById('partners').scrollIntoView({behavior:'smooth'})">Partners</div>
+    <div class="mobile-nav__link" onclick="document.getElementById('mobile-nav').classList.remove('open');document.getElementById('mobile-nav-overlay').style.display='none';document.body.style.overflow='';document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact</div>
+  </div>
+  <div class="mobile-nav__portal">
+    <button class="btn btn--primary" style="width:100%;margin-bottom:0.75rem;" data-portal-open>Portal Access</button>
+    <button class="btn btn--outline-dark" style="width:100%;" data-search-open>Search</button>
+  </div>
+</nav>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container" aria-live="polite" aria-label="Notifications"></div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
